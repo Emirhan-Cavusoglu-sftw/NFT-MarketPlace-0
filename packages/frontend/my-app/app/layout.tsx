@@ -4,6 +4,7 @@ import "./globals.css";
 import { WagmiConfig } from "wagmi";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import {ConnectProvider} from "./connect-provider";
+import Header from "./Header";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <div>
           <ConnectProvider>
+            <Header />
             {children}
           </ConnectProvider>
         </div>
