@@ -8,12 +8,12 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <div className="bg-black">
+    <div className="bg-[#FFD700]">
       <nav className="w-screen">
         <ul className="flex items-end justify-between py-3 bg-transparent text-white pr-5">
           <li className="flex items-end ml-5 pb-2">
           <Image
-                  src={"/İTÜ Blockchain.png"}
+                  src={"/itüLogo.png"}
                   alt=""
                   width={100}
                   height={50}

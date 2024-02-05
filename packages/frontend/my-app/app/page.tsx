@@ -41,7 +41,7 @@ export default function Home() {
   return (
     <div
       className="flex flex-col place-items-center mt-20"
-      style={{ backgroundColor: "purple", height: "100vh" }}
+  
     >
       <div className="md:text-xl font-bold text-white">Top NFTs</div>
 
