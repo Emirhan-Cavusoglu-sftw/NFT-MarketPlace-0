@@ -40,11 +40,11 @@ export default function Header() {
               )}
               {pathname === "/" ? (
                 <li className="border-b-2 hover:pb-0 p-2">
-                  <Link href="/sellNFT">List My NFT</Link>
+                  <Link href="/BuySellNFT">List My NFT</Link>
                 </li>
               ) : (
                 <li className="hover:border-b-2 hover:pb-0 p-2">
-                  <Link href="/sellNFT">List My NFT</Link>
+                  <Link href="/BuySellNFT">List My NFT</Link>
                 </li>
               )}
               {pathname === "/" ? (
