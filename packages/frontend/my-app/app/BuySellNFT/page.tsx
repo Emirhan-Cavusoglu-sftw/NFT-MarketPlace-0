@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useContractRead, useContractWrite, useAccount } from "wagmi";
 import nftMarketPlaceABI from "../abis/nftMarketPlaceABI.json";
 import { parseEther } from 'viem'
-const page = () => {
+const Page = () => {
     const contractAddress = "0xe92C8d48e1dad7Cb83719396cc5d5BA36FBFF70E";
     const [formParams, updateFormParams] = useState({ name: '', description: '', price: ''});
     const [fileURL, setFileURL] = useState(null);
@@ -211,7 +211,7 @@ const page = () => {
   )
 }
 
-export default page
+export default Page;
 
 
 
