@@ -49,11 +49,11 @@ export default function Header() {
               )}
               {pathname === "/" ? (
                 <li className="border-b-2 hover:pb-0 p-2">
-                  <Link href="/profile">Profile</Link>
+                  <Link href="/ProfilePage">Profile</Link>
                 </li>
               ) : (
                 <li className="hover:border-b-2 hover:pb-0 p-2">
-                  <Link href="/profile">Profile</Link>
+                  <Link href="/ProfilePage">Profile</Link>
                 </li>
               )}
               <li>
