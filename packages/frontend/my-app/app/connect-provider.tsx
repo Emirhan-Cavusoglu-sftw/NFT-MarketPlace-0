@@ -40,7 +40,7 @@ export const ConnectProvider =({ children }) => {
         <RainbowKitProvider modalSize="compact" theme={darkTheme({
         accentColor: '#7D3799',
         accentColorForeground: 'white',
-        borderRadius: 'medium',
+        borderRadius: 'large',
       })} chains={chains}>{children}</RainbowKitProvider>
         </WagmiConfig>
     );

@@ -45,7 +45,7 @@ export default function Home() {
     >
       <div className="md:text-xl font-bold text-white">Top NFTs</div>
 
-      <Link href={"/NftInfoPage"}>
+      <Link href={"/NftInfoPage"} className="text-white">
         <div className="flex mt-5 justify-between flex-wrap max-w-screen-xl text-center">
           {sampleData.map((value, index) => {
             return <NFTCard data={value} key={index}></NFTCard>;
