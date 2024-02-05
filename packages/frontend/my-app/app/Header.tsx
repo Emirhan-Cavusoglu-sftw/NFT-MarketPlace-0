@@ -8,22 +8,22 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <div className="bg-[#FFD700]">
-      <nav className="w-screen">
-        <ul className="flex items-end justify-between py-3 bg-transparent text-white pr-5">
+    <div>
+      <nav className="w-screen ">
+        <ul className="flex items-end justify-between py-3 bg-transparent text-white pr-5 ">
           <li className="flex items-end ml-5 pb-2">
-          <Image
-                  src={"/itüLogo.png"}
-                  alt=""
-                  width={100}
-                  height={50}
-                  className=" mt-2"
-                ></Image>
+            <Image
+              src={"/itüLogo.png"}
+              alt=""
+              width={100}
+              height={50}
+              className=" mt-2"
+            ></Image>
           </li>
           <li className="flex items-end pb-4">
             <Link href="/">
               <div className="inline-block font-bold text-xl mr-[900px] pb-7">
-              NFT Marketplace
+                NFT Marketplace
               </div>
             </Link>
           </li>
