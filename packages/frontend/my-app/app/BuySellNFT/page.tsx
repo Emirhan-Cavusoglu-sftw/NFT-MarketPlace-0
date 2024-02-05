@@ -3,9 +3,10 @@ import React from 'react'
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../utils/pinata";
 import { useState } from 'react';
 import { useContractRead, useContractWrite, useAccount } from "wagmi";
+import { writeContract } from 'wagmi/actions';
 import nftMarketPlaceABI from "../abis/nftMarketPlaceABI.json";
 import { parseEther } from 'viem'
-const page = () => {
+const Page = () => {
     const contractAddress = "0xe92C8d48e1dad7Cb83719396cc5d5BA36FBFF70E";
     const [formParams, updateFormParams] = useState({ name: '', description: '', price: ''});
     const [fileURL, setFileURL] = useState(null);
@@ -23,15 +24,14 @@ const page = () => {
         functionName: "createToken",
       });
     
-      const { data: listingPrice} = useContractRead({
+      const {data :listingPrice}= useContractRead({
         address: contractAddress,
         abi: nftMarketPlaceABI,
         functionName: "getListPrice",
       });
     
       
-    
-    
+    const listedPrice= listingPrice.toString();
     
     
     
@@ -104,11 +104,19 @@ const page = () => {
 
             //massage the params to be sent to the create NFT request
             const price = parseEther(formParams.price)
-            let listPrice = listingPrice.toString()
-            
+            // const listedPrice = listingPrice.toString()
+            console.log("listedPrice", listedPrice)
 
             //actually create the NFT
-            let transaction = createToken({args:[metadataURL, price, listPrice]})
+            //  createToken({args:[metadataURL, price]})
+
+            await writeContract({
+                address: contractAddress,
+                abi: nftMarketPlaceABI,
+                functionName: "createToken",
+                args: [metadataURL, price],
+                value: listedPrice
+            })
             // await transaction.wait()
 
             alert("Successfully listed your NFT!");
@@ -211,7 +219,7 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
 
 
 

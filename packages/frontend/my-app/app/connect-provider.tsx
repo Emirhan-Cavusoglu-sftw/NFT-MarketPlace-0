@@ -16,14 +16,14 @@ import { publicProvider } from 'wagmi/providers/public';
 const { chains, publicClient } = configureChains(
     [sepolia],
     [
-      alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
+      alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_SEPOLIA_API_KEY }),
       publicProvider()
     ]
   );
   
   const { connectors } = getDefaultWallets({
     appName: 'My RainbowKit App',
-    projectId: 'YOUR_PROJECT_ID',
+    projectId: '8e3c26c24e7058275cb8c2b859655a3c',
     chains
   });
   
