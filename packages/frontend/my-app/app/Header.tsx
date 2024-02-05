@@ -8,8 +8,8 @@ export default function Header() {
     const pathname = usePathname()
 
   return (
-    <header>
-    <div className="">
+    
+    <div className="bg-black">
         <nav className="w-screen">
           <ul className='flex items-end justify-between py-3 bg-transparent text-white pr-5'>
           <li className='flex items-end ml-5 pb-2'>
@@ -58,7 +58,7 @@ export default function Header() {
         </nav>
         
       </div>
-    </header>
+    
   );
 }
 
