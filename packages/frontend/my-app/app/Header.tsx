@@ -22,7 +22,7 @@ export default function Header() {
           </li>
           <li className="flex items-end pb-4">
             <Link href="/">
-              <div className="inline-block font-bold text-xl mr-[900px] pb-7 ">
+              <div className="inline-block font-bold text-xl mr-[900px] pb-7">
               NFT Marketplace
               </div>
             </Link>

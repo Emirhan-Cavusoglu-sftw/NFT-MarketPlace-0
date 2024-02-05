@@ -1,4 +1,5 @@
 "use client"
+import { darkTheme } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import {
   getDefaultWallets,
@@ -36,7 +37,11 @@ const { chains, publicClient } = configureChains(
 export const ConnectProvider =({ children }) => {
     return (
         <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
+        <RainbowKitProvider modalSize="compact" theme={darkTheme({
+        accentColor: '#7D3799',
+        accentColorForeground: 'white',
+        borderRadius: 'medium',
+      })} chains={chains}>{children}</RainbowKitProvider>
         </WagmiConfig>
     );
 };
