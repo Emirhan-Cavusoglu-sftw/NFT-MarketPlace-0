@@ -1,0 +1,17 @@
+{
+  "name": "nft-marketplace-0",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Emirhan-Cavusoglu-sftw/NFT-MarketPlace-0.git",
+  "author": "Emirhan-Cavusoglu-sftw <emirhancavusoglu.sftw@gmail.com>",
+  "license": "MIT",
+  "workspaces": {
+		"packages": [
+			"packages/*"
+		],
+		"nohoist": [
+			"**/backend",
+			"**/backend/**"
+		]
+	}
+}
