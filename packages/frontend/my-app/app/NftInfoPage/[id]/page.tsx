@@ -43,7 +43,7 @@ const NftInfoPage = () => {
       address: contractAddress,
       abi: nftMarketPlaceABI,
       functionName: "tokenURI",
-      args: [2],
+      args: [tokenId],
     });
     const listedNft = await readContract({
       address: contractAddress,
