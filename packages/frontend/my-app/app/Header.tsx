@@ -10,25 +10,25 @@ export default function Header() {
   return (
     <div>
       <nav className="w-screen ">
-        <ul className="flex items-end justify-between py-2 bg-transparent text-white pr-5 ">
-          <li className="flex items-end ml-5 pb-2">
+        <ul className="flex items-end justify-between py-3 bg-transparent text-white pr-5 bg-gradient-to-r from-stone-900 to-yellow-500 h-20">
+          <li className="flex items-end ml-5 pb-1">
             <Image
               src={"/itüLogo.png"}
               alt=""
-              width={100}
-              height={50}
+              width={50}
+              height={20}
               className=" mt-2"
             ></Image>
           </li>
           <li className="flex items-end pb-4">
             <Link href="/">
-              <div className="inline-block font-bold text-xl mr-[900px] pb-7">
+              <div className="inline-block font-bold text-xl mr-[900px] pb-1">
                 NFT Marketplace
               </div>
             </Link>
           </li>
-          <li className="w-2/6">
-            <ul className="lg:flex justify-between font-bold mr-10 pb-10 text-lg">
+          <li className="w-2/6 ">
+            <ul className="lg:flex justify-between font-bold mr-10 pb-2 text-lg">
               {pathname === "/" ? (
                 <li className="border-b-2 hover:pb-0 p-2">
                   <Link href="/">Marketplace</Link>

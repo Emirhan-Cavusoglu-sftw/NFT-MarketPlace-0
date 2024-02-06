@@ -34,27 +34,26 @@ body {
 } */
 
 
-/* body {
-  margin: 0;
-  padding: 0;
-  background-color: #7D3799;
-  width: 100vw;
-  height: 100vh;
-  background-image: url(../public/ETHs.png);
-
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-} */
-
 body {
   margin: 0;
   padding: 0;
+  background-color:darkslategray;
   width: 100vw;
-  height: 100vh;
+  
+  /* background-image: url(../public/ETHs.png); */
+
+  background-position: center center;
+  background-repeat: repeat;
+  background-size: cover;
+}
+
+/* body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
 
   background-image: linear-gradient(to bottom, #1c1e21, #7928ca, #8a3ab9);
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-}
+} */

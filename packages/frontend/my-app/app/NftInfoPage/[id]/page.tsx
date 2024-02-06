@@ -78,40 +78,35 @@ const NftInfoPage = () => {
   if (typeof data.image == "string")
     data.image = GetIpfsUrlFromPinata(data.image);
 
-  return (
-    <div className="flex ml-20 mt-20">
-      <img src={data.image} alt="" className="w-2/5" />
-      <div className="text-xl ml-20 space-y-8 text-white shadow-2xl rounded-lg border-2 p-5">
-        <div>Name: {data.name}</div>
-        <div>Description: {data.description}</div>
-        <div>
-          Price: <span className="">{data.price + " ETH"}</span>
-        </div>
-        <div>
-          Owner: <span className="text-sm">{data.owner}</span>
-        </div>
-        <div>
-          Seller: <span className="text-sm">{data.seller}</span>
-        </div>
-        <div>
-          {currAddress != data.owner && currAddress != data.seller ? (
-            <button
-              className="enableEthereumButton bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
-              onClick={() => buyNFT(tokenId)}
-            >
-              Buy this NFT
-            </button>
-          ) : (
-            <div className="text-emerald-700">
-              You are the owner of this NFT
-            </div>
-          )}
-
-          <div className="text-green text-center mt-3">{message}</div>
+    return (
+      <div className="flex items-center justify-center mt-10">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <img src={data.image} alt="" className="w-full h-64 object-cover" />
+          <div className="px-6 py-4">
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">{data.name}</h2>
+            <p className="text-gray-700">{data.description}</p>
+          </div>
+          <div className="px-6 py-4">
+            <div className="text-gray-700">Price: <span className="font-semibold">{data.price} ETH</span></div>
+            <div className="text-gray-700">Owner: <span className="font-semibold">{data.owner}</span></div>
+            <div className="text-gray-700">Seller: <span className="font-semibold">{data.seller}</span></div>
+          </div>
+          <div className="px-6 py-4 flex justify-center items-center">
+            {currAddress !== data.owner && currAddress !== data.seller ? (
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm"
+                onClick={() => buyNFT(tokenId)}
+              >
+                Buy this NFT
+              </button>
+            ) : (
+              <div className="text-green-600 font-semibold">You are the owner of this NFT</div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+    
 };
 
 export default NftInfoPage;
