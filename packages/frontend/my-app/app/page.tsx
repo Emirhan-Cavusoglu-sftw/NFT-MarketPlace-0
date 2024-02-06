@@ -11,7 +11,7 @@ import axios from "axios";
 export default function Home() {
   const [data, updateData] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
-  const contractAddress = "0x424778313C58D929B8D948d28e4D70dBB742b135";
+  const contractAddress = "0xbB6EB8CfA4790Aeb1AA6258c5A03DBD4f3Ac2386";
   const sampleData = [
     {
       name: "NFT#1",

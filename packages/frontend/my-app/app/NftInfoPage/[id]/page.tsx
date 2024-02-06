@@ -8,7 +8,7 @@ import { readContract, writeContract } from "wagmi/actions";
 import { useAccount } from "wagmi";
 import { formatEther, parseEther } from "viem";
 const NftInfoPage = () => {
-  const contractAddress = "0x424778313C58D929B8D948d28e4D70dBB742b135";
+  const contractAddress = "0xbB6EB8CfA4790Aeb1AA6258c5A03DBD4f3Ac2386";
   const account = useAccount();
   const [data, updateData] = useState({});
   const [dataFetched, updateDataFetched] = useState(false);
