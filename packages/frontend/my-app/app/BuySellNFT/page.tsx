@@ -195,14 +195,16 @@ const Page = () => {
           >
             Create NFT
           </button>
-        ):(<button
-          disabled
-          className="font-bold mt-10 w-full opacity-25 bg-slate-600 text-white rounded p-2 shadow-lg"
-          id="list-button"
-          onClick={createNFT}
-        >
-          Create NFT
-        </button>)}
+        ) : (
+          <button
+            disabled
+            className="font-bold mt-10 w-full opacity-25 bg-slate-600 text-white rounded p-2 shadow-lg"
+            id="list-button"
+            onClick={createNFT}
+          >
+            Create NFT
+          </button>
+        )}
       </form>
     </div>
   );

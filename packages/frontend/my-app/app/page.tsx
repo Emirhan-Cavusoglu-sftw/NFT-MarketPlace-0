@@ -46,14 +46,11 @@ export default function Home() {
   ];
 
   async function getNFTData() {
-    
-
     let transaction = await readContract({
       address: contractAddress,
       abi: nftMarketPlaceABI,
       functionName: "getAllNFTs",
     });
-    
 
     const items = await Promise.all(
       transaction.map(async (i) => {
@@ -77,22 +74,16 @@ export default function Home() {
           name: meta.name,
           description: meta.description,
         };
-        
+
         return item;
       })
     );
     updateData(items);
     updateFetched(true);
-
-    
   }
-  if(!dataFetched)
-    getNFTData();
+  if (!dataFetched) getNFTData();
   return (
-    <div
-      className="flex flex-col place-items-center mt-20"
-  
-    >
+    <div className="flex flex-col place-items-center mt-20">
       <div className="md:text-xl font-bold text-white">Top NFTs</div>
 
       <Link href={"/NftInfoPage"} className="text-white">
