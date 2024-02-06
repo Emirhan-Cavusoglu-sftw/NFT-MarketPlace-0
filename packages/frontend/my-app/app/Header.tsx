@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <div>
       <nav className="w-screen ">
-        <ul className="flex items-end justify-between py-3 bg-transparent text-white pr-5 ">
+        <ul className="flex items-end justify-between py-2 bg-transparent text-white pr-5 ">
           <li className="flex items-end ml-5 pb-2">
             <Image
               src={"/itüLogo.png"}
