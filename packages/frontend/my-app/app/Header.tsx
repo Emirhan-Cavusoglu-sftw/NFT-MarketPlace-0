@@ -20,15 +20,15 @@ export default function Header() {
               className=" mt-2"
             ></Image>
           </li>
-          <li className="flex items-end pb-4">
+          <li className="flex items-end pb-4 ">
             <Link href="/">
-              <div className="inline-block font-bold text-xl mr-[900px] pb-1">
+              <div className="inline-block font-bold text-xl mr-[900px] pb-0">
                 NFT Marketplace
               </div>
             </Link>
           </li>
           <li className="w-2/6 ">
-            <ul className="lg:flex justify-between font-bold mr-10 pb-2 text-lg">
+            <ul className="lg:flex justify-between font-bold mr-14 pb-2 text-lg ">
               {pathname === "/" ? (
                 <li className="border-b-2 ">
                   <Link href="/">Marketplace</Link>
@@ -56,7 +56,7 @@ export default function Header() {
                   <Link href="/ProfilePage">Profile</Link>
                 </li>
               )}
-              <li>
+              <li className="">
                 <ConnectButton />
               </li>
             </ul>
