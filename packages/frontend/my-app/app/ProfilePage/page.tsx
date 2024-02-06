@@ -73,34 +73,57 @@ const ProfilePage = () => {
   return (
     <>
       <div className="profileClass">
-        <div className="flex text-center flex-col mt-11 md:text-2xl text-white">
-          <div className="mb-5">
-            <h2 className="font-bold">Wallet Address</h2>
-            {account.address}
+        <div className="container mx-auto px-4">
+          <h1 className="text-3xl font-bold mb-8 text-center mt-8 bg-gradient-to-r from-yellow-400 to-yellow-800 bg-clip-text text-transparent">
+            Your NFT Profile
+          </h1>
+
+          <div className="flex flex-col md:flex-row justify-between mb-8">
+            <div className="bg-gradient-to-r from-yellow-400 to-yellow-800 rounded-lg p-4">
+              <h2 className="text-2xl font-bold mb-3 text-white">
+                Wallet Address
+              </h2>
+              <p className="text-lg text-white">{account.address}</p>
+            </div>
+            <div className="flex flex-col md:flex-row items-center bg-gradient-to-r from-yellow-400 to-yellow-800 rounded-lg p-4">
+              <div className="flex items-center mr-25">
+                <h2 className="text-2xl font-bold mb-3 text-white">
+                  No. of NFTs =
+                </h2>
+                <p className="text-2xl text-white mb-3 ml-4 mr-10">
+                  {data.length}
+                </p>
+              </div>
+              <div className="mt-3 md:mt-0 ml-4">
+                <h2 className="text-2xl font-bold mb-3 text-white">
+                  Total Value
+                </h2>
+                <p className="text-2xl text-white">{totalPrice} ETH</p>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="flex flex-row text-center justify-center mt-10 md:text-2xl text-white">
-          <div>
-            <h2 className="font-bold">No. of NFTs</h2>
-            {data.length}
+
+          <h2 className="text-2xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-400 to-yellow-800 bg-clip-text text-transparent">
+            Your NFTs
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {data.length > 0 ? (
+              data.map((value, index) => (
+                <NFTCard data={value} key={index} className="hover:shadow-lg" />
+              ))
+            ) : (
+              <div className="flex items-center justify-center h-48 bg-gray-200 rounded-lg">
+                <p className="text-xl">Loading your NFTs...</p>
+              </div>
+            )}
           </div>
-          <div className="ml-20">
-            <h2 className="font-bold">Total Value</h2>
-            {totalPrice} ETH
-          </div>
-        </div>
-        <div className="flex flex-col text-center items-center mt-11 text-white">
-          <h2 className="font-bold">Your NFTs</h2>
-          <div className="flex justify-center flex-wrap max-w-screen-xl">
-            {data.map((value, index) => {
-              return <NFTCard data={value} key={index}></NFTCard>;
-            })}
-          </div>
-          <div className="mt-10 text-xl">
-            {data.length == 0
-              ? "Oops, No NFT data to display (Are you logged in?)"
-              : ""}
-          </div>
+
+          {data.length === 0 && (
+            <p className="text-center mt-8 text-lg text-gray-500">
+              No NFTs found in your collection. Connect your wallet or start
+              exploring NFTs to add them here!
+            </p>
+          )}
         </div>
       </div>
     </>
