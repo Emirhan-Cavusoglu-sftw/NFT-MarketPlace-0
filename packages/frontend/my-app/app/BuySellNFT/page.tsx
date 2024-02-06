@@ -180,7 +180,7 @@ const Page = () => {
             className="block text-purple-500 text-sm font-bold mb-2"
             htmlFor="image"
           >
-            Upload Image (&lt;500 KB)
+            Upload Image (&lt;1000 KB)
           </label>
           <input type={"file"} onChange={OnChangeFile}></input>
         </div>
