@@ -37,7 +37,7 @@ const Page = () => {
   });
 
   // const listedPrice = listingPrice?.toString();
- 
+  const listedPrice= listingPrice
   // console.log(listedPrice);
 
   async function OnChangeFile(e: any) {
@@ -107,7 +107,7 @@ const Page = () => {
         abi: nftMarketPlaceABI,
         functionName: "createToken",
         args: [metadataURL, price],
-        value: listingPrice,
+        value: listedPrice,
       });
       // await transaction.wait()
 
