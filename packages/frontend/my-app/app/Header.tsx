@@ -30,29 +30,29 @@ export default function Header() {
           <li className="w-2/6 ">
             <ul className="lg:flex justify-between font-bold mr-10 pb-2 text-lg">
               {pathname === "/" ? (
-                <li className="border-b-2 hover:pb-0 p-2">
+                <li className="border-b-2 ">
                   <Link href="/">Marketplace</Link>
                 </li>
               ) : (
-                <li className="hover:border-b-2 hover:pb-0 p-2">
+                <li className="hover:border-b-2 ">
                   <Link href="/">Marketplace</Link>
                 </li>
               )}
               {pathname === "/BuySellNFT" ? (
-                <li className="border-b-2 hover:pb-0 p-2">
+                <li className="border-b-2 ">
                   <Link href="/BuySellNFT">Create My NFT</Link>
                 </li>
               ) : (
-                <li className="hover:border-b-2 hover:pb-0 p-2">
+                <li className="hover:border-b-2 ">
                   <Link href="/BuySellNFT">Create My NFT</Link>
                 </li>
               )}
               {pathname === "/ProfilePage" ? (
-                <li className="border-b-2 hover:pb-0 p-2">
+                <li className="border-b-2 ">
                   <Link href="/ProfilePage">Profile</Link>
                 </li>
               ) : (
-                <li className="hover:border-b-2 hover:pb-0 p-2">
+                <li className="hover:border-b-2 ">
                   <Link href="/ProfilePage">Profile</Link>
                 </li>
               )}
