@@ -37,7 +37,7 @@ const Page = () => {
   });
 
   // const listedPrice = listingPrice?.toString();
-  const listedPrice = formatEther(listingPrice as bigint);
+ 
   // console.log(listedPrice);
 
   async function OnChangeFile(e: any) {
@@ -107,7 +107,7 @@ const Page = () => {
         abi: nftMarketPlaceABI,
         functionName: "createToken",
         args: [metadataURL, price],
-        value: parseEther(listedPrice),
+        value: listingPrice,
       });
       // await transaction.wait()
 
