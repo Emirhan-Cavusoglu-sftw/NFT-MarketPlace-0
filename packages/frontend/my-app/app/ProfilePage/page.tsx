@@ -58,10 +58,8 @@ const ProfilePage = () => {
                 functionName: "tokenURI",
                 args: [i.tokenId]
             })
-            
-            // console.log(tokenURI);
-            
-            let meta = await axios.get(tokenURI);
+
+            let meta = await axios.get(tokenURI as string);
             meta = meta.data;
 
             let price = formatEther(i.price.toString());
@@ -70,7 +68,7 @@ const ProfilePage = () => {
                 tokenId: i.tokenId,
                 seller: i.seller,
                 owner: i.owner,
-                image: meta.image,
+                image: meta.image, // Access the 'data' property of the 'meta' object to get the image property
                 name: meta.name,
                 description: meta.description,
             }

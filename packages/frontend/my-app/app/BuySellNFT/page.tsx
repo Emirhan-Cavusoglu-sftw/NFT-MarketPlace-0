@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useContractRead, useContractWrite, useAccount } from "wagmi";
 import { writeContract } from "wagmi/actions";
 import nftMarketPlaceABI from "../abis/nftMarketPlaceABI.json";
-import { parseEther } from "viem";
+import { parseEther, formatEther } from "viem";
 const Page = () => {
   const contractAddress = "0x424778313C58D929B8D948d28e4D70dBB742b135";
   const [formParams, updateFormParams] = useState({
@@ -15,6 +15,8 @@ const Page = () => {
   });
   const [fileURL, setFileURL] = useState(null);
   const [message, updateMessage] = useState("");
+  const [isFileUploaded, setIsFileUploaded] = useState(false);
+  const [enableButton, setEnableButton] = useState(false);
 
   // WAGMI HOOKS
   const {
@@ -28,25 +30,31 @@ const Page = () => {
     functionName: "createToken",
   });
 
-  const {data:listingPrice}  = useContractRead({
+  const { data: listingPrice } = useContractRead({
     address: contractAddress,
     abi: nftMarketPlaceABI,
     functionName: "getListPrice",
   });
 
-  const listedPrice = listingPrice?.toString();
-console.log(listedPrice);
+  // const listedPrice = listingPrice?.toString();
+  const listedPrice = formatEther(listingPrice as bigint);
+  // console.log(listedPrice);
 
   async function OnChangeFile(e: any) {
     var file = e.target.files[0];
     //check for file extension
     try {
       //upload the file to IPFS
-
+      updateMessage("Uploading image to IPFS.. please wait!");
       const response = await uploadFileToIPFS(file);
       if (response.success === true) {
         console.log("Uploaded image to Pinata: ", response.pinataURL);
         setFileURL(response.pinataURL);
+        setIsFileUploaded(true);
+        updateMessage(
+          "Image uploaded successfully! you can now click on Create NFT!"
+        );
+        setEnableButton(true);
       }
     } catch (e) {
       console.log("Error during file upload", e);
@@ -55,7 +63,7 @@ console.log(listedPrice);
   async function uploadMetadataToIPFS() {
     const { name, description, price } = formParams;
     //Make sure that none of the fields are empty
-    if (!name || !description || !price || !fileURL) {
+    if (!name || !description || !price || !isFileUploaded) {
       updateMessage("Please fill all the fields!");
       return -1;
     }
@@ -99,7 +107,7 @@ console.log(listedPrice);
         abi: nftMarketPlaceABI,
         functionName: "createToken",
         args: [metadataURL, price],
-        value: listedPrice,
+        value: parseEther(listedPrice),
       });
       // await transaction.wait()
 
@@ -143,10 +151,7 @@ console.log(listedPrice);
           </label>
           <textarea
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            cols="40"
-            rows="5"
             id="description"
-            type="text"
             placeholder="Axie Infinity Collection"
             onChange={(e) =>
               updateFormParams({ ...formParams, description: e.target.value })
@@ -181,13 +186,23 @@ console.log(listedPrice);
         </div>
         <br></br>
         <div className="text-red-500 text-center">{message}</div>
-        <button
-          className="font-bold mt-10 w-full bg-purple-500 text-white rounded p-2 shadow-lg"
+
+        {enableButton ? (
+          <button
+            className="font-bold mt-10 w-full bg-purple-500 hover:shadow-yellow-400 hover:shadow-md text-white rounded p-2 shadow-lg"
+            id="list-button"
+            onClick={createNFT}
+          >
+            Create NFT
+          </button>
+        ):(<button
+          disabled
+          className="font-bold mt-10 w-full opacity-25 bg-slate-600 text-white rounded p-2 shadow-lg"
           id="list-button"
           onClick={createNFT}
         >
           Create NFT
-        </button>
+        </button>)}
       </form>
     </div>
   );
