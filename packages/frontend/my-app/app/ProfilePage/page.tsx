@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import NFTCard from "../components/NFTCard";
@@ -8,6 +8,7 @@ import { useContractRead, useContractWrite, useAccount } from "wagmi";
 import { readContract } from "wagmi/actions";
 import { formatEther } from "viem";
 import { useParams } from "next/navigation";
+import dynamic from "next/dynamic";
 
 const ProfilePage = () => {
   const contractAddress = "0xbB6EB8CfA4790Aeb1AA6258c5A03DBD4f3Ac2386";
@@ -65,10 +66,18 @@ const ProfilePage = () => {
 
     updateTotalPrice(sumPrice.toPrecision(3));
   }
-
+  
   const params = useParams();
-  const tokenId = params.tokenId;
-  if (!dataFetched) getNFTData(tokenId);
+  useEffect(() => {
+    
+    const tokenId = params.tokenId;
+    if (!dataFetched) getNFTData(tokenId);
+    
+  }, [])
+  
+
+
+  
 
   return (
     <>
@@ -130,4 +139,6 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default dynamic(() => Promise.resolve(ProfilePage), {
+  ssr: false,
+});
