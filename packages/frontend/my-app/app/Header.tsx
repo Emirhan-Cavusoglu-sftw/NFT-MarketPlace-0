@@ -28,7 +28,7 @@ export default function Header() {
             </Link>
           </li>
           <li className="w-2/6 ">
-            <ul className="lg:flex justify-between font-bold mr-18 text-lg space-x-10">
+            <ul className="lg:flex  font-bold mr-18  text-lg space-x-10">
               {pathname === "/" ? (
                 <li className="border-b-2">
                   <Link href="/">Marketplace</Link>

@@ -242,7 +242,7 @@ const NFTCollectionPage = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center mt-10">
+      <div className="flex items-center justify-center mt-10 pagebackground">
         <div className="bg-gradient-to-r from-yellow-800 to-yellow-400  rounded-lg shadow-lg overflow-hidden">
           <img src={data.image} alt="" className="w-full h-64 object-cover" />
           <div className="px-6 py-4">
