@@ -1,17 +1,20 @@
 "use client";
 import React from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../utils/pinata";
+import { collectionFactoryAddress} from "../utils/constants";
 import { useState } from "react";
 import { useContractRead, useContractWrite, useAccount } from "wagmi";
 import { writeContract } from "wagmi/actions";
-import nftMarketPlaceABI from "../abis/nftMarketPlaceABI.json";
+
+import collectionFactoryABI from "../abis/collectionFactoryABI.json";
 import { parseEther, formatEther } from "viem";
 const Page = () => {
   const contractAddress = "0xbB6EB8CfA4790Aeb1AA6258c5A03DBD4f3Ac2386";
   const [formParams, updateFormParams] = useState({
     name: "",
+    symbol:"",
     description: "",
-    price: "",
+    
   });
   const [fileURL, setFileURL] = useState(null);
   const [message, updateMessage] = useState("");
@@ -19,26 +22,9 @@ const Page = () => {
   const [enableButton, setEnableButton] = useState(false);
 
   // WAGMI HOOKS
-  const {
-    data: dataPay,
-    isLoading: loadingPay,
-    isSuccess: successPay,
-    write: createToken,
-  } = useContractWrite({
-    address: contractAddress,
-    abi: nftMarketPlaceABI,
-    functionName: "createToken",
-  });
 
-  const { data: listingPrice } = useContractRead({
-    address: contractAddress,
-    abi: nftMarketPlaceABI,
-    functionName: "getListPrice",
-  });
-
-  // const listedPrice = listingPrice?.toString();
-  const listedPrice= listingPrice
-  // console.log(listedPrice);
+  
+  
 
   async function OnChangeFile(e: any) {
     var file = e.target.files[0];
@@ -61,17 +47,18 @@ const Page = () => {
     }
   }
   async function uploadMetadataToIPFS() {
-    const { name, description, price } = formParams;
+    const { name, symbol,description } = formParams;
     //Make sure that none of the fields are empty
-    if (!name || !description || !price || !isFileUploaded) {
+    if (!name || !symbol ||!description ||  !isFileUploaded) {
       updateMessage("Please fill all the fields!");
       return -1;
     }
 
     const nftJSON = {
       name,
+      symbol,
       description,
-      price,
+      
       image: fileURL,
     };
 
@@ -98,18 +85,19 @@ const Page = () => {
         "Uploading NFT(takes 5 mins).. please dont click anything!"
       );
 
-      const price = parseEther(formParams.price);
-
-      console.log("listedPrice", listedPrice);
+      
+      const symbol = formParams.symbol;
+      const name = formParams.name;
+      
 
       await writeContract({
-        address: contractAddress,
-        abi: nftMarketPlaceABI,
-        functionName: "createToken",
-        args: [metadataURL, price],
-        value: listedPrice,
+        address: collectionFactoryAddress,
+        abi: collectionFactoryABI,
+        functionName: "createNFTCollectionContract",
+        args: [name,symbol,metadataURL ]
+        
       });
-      // await transaction.wait()
+      
 
       alert("Successfully listed your NFT!");
 
@@ -131,7 +119,7 @@ const Page = () => {
             bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
             htmlFor="name"
           >
-            NFT Name
+            Collection Name
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -140,6 +128,22 @@ const Page = () => {
             placeholder="Axie#4563"
             onChange={(e) =>
               updateFormParams({ ...formParams, name: e.target.value })
+            }
+          />
+        </div>
+        <div className="mb-6">
+          <label
+            className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+            htmlFor="description"
+          >
+            Collection Symbol
+          </label>
+          <textarea
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="description"
+            placeholder="Axie Infinity Collection"
+            onChange={(e) =>
+              updateFormParams({ ...formParams, symbol: e.target.value })
             }
           />
         </div>
@@ -159,7 +163,7 @@ const Page = () => {
             }
           />
         </div>
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <label
             className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
             htmlFor="price"
@@ -175,7 +179,7 @@ const Page = () => {
               updateFormParams({ ...formParams, price: e.target.value })
             }
           />
-        </div>
+        </div> */}
         <div className="mb-6">
           <label
             className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
@@ -184,7 +188,7 @@ const Page = () => {
             Upload Image (&lt;1000 KB)
           </label>
           <div className="flex items-center justify-between bg-gray-100 border-2 border-gray-200 rounded-md py-2 px-4">
-          <input type={"file"} onChange={OnChangeFile} />
+            <input type={"file"} onChange={OnChangeFile} />
           </div>
         </div>
         <div className="text-red-500 text-sm mb-4 text-center">{message}</div>
@@ -193,20 +197,19 @@ const Page = () => {
             className="w-full bg-purple-600 hover:bg-purple-700 bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             onClick={createNFT}
           >
-            Create NFT
+            Create NFT Collection
           </button>
         ) : (
           <button
             disabled
             className="w-full bg-gray-400 text-white font-bold py-2 px-4 rounded cursor-not-allowed"
           >
-            Create NFT
+            Create NFT Collection
           </button>
         )}
       </form>
     </div>
   );
-  
 };
 
 export default Page;

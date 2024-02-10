@@ -3,42 +3,50 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import NFTCard from "../components/NFTCard";
+import { marketPlaceAddress ,collectionFactoryAddress} from "../utils/constants";
 import nftMarketPlaceABI from "../abis/nftMarketPlaceABI.json";
 import { useContractRead, useContractWrite, useAccount } from "wagmi";
 import { readContract } from "wagmi/actions";
 import { formatEther } from "viem";
 import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
-
+import collectionFactoryABI from "../abis/collectionFactoryABI.json";
+import collectionABI from "../abis/collectionABI.json";
 const ProfilePage = () => {
-  const contractAddress = "0xbB6EB8CfA4790Aeb1AA6258c5A03DBD4f3Ac2386";
-  const [data, updateData] = useState([]);
+  
+  const [dataa, updateData] = useState([]);
+  const [collectionData, updateCollectionData] = useState([]);
+  const [collectionArray, updateCollectionArray] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
-  const [address, updateAddress] = useState("0x");
+  const [collectionDataFetched, collectionUpdateFetched] = useState(false);
+  
   const [totalPrice, updateTotalPrice] = useState("0");
   const account = useAccount();
 
-  const { data: listingPrice } = useContractRead({
-    address: contractAddress,
-    abi: nftMarketPlaceABI,
-    functionName: "getAllNFTs",
-  });
+  const { data, isError, isLoading } = useContractRead({
+    address: collectionFactoryAddress,
+    abi: collectionFactoryABI,
+    functionName: 'getUserCollection',
+    account: account.address,
+  })
 
-  async function getNFTData(tokenId) {
+  
+
+  async function getNFTData() {
     let sumPrice = 0;
 
     let transaction = await readContract({
-      address: contractAddress,
+      address: marketPlaceAddress,
       abi: nftMarketPlaceABI,
       functionName: "getAllNFTs",
     });
-    console.log(transaction[0].seller);
+    // console.log(transaction[0].seller);
     transaction = transaction.filter((i) => i.seller == account.address);
 
     const items = await Promise.all(
       transaction.map(async (i) => {
         const tokenURI = await readContract({
-          address: contractAddress,
+          address: marketPlaceAddress,
           abi: nftMarketPlaceABI,
           functionName: "tokenURI",
           args: [i.tokenId],
@@ -53,7 +61,7 @@ const ProfilePage = () => {
           tokenId: i.tokenId,
           seller: i.seller,
           owner: i.owner,
-          image: meta.image, // Access the 'data' property of the 'meta' object to get the image property
+          image: meta.image, 
           name: meta.name,
           description: meta.description,
         };
@@ -61,22 +69,77 @@ const ProfilePage = () => {
         return item;
       })
     );
-    updateData(items);
+    updateData(items.slice(2));
     updateFetched(true);
 
     updateTotalPrice(sumPrice.toPrecision(3));
   }
   
-  const params = useParams();
+  async function getCollectionData() {
+    let sumPrice = 0;
+    
+    let numberOfCollections = await readContract({
+      address: collectionFactoryAddress,
+      abi: collectionFactoryABI,
+      functionName: "numberOfCreatedCollectionPerUser",
+      args: [account.address],
+    });
+
+    console.log(data);
+
+    // const data = await readContract({
+    //   address: collectionFactoryAddress,
+    //   abi: collectionFactoryABI,
+    //   functionName: "getUserCollection",
+      
+    // });
+    
+    
+    
+    
+    const items = await Promise.all(
+      data.map(async (i) => {
+        const tokenURI = await readContract({
+          address: i,
+          abi: collectionABI,
+          functionName: "collectionURI",
+          
+        });
+
+        let meta = await axios.get(tokenURI as string);
+        meta = meta.data;
+
+        
+        let item = {
+          
+          image: meta.image, // Access the 'data' property of the 'meta' object to get the image property
+          name: meta.name,
+          description: meta.description,
+        };
+        
+        return item;
+      })
+    );
+    updateCollectionData(items);
+    collectionUpdateFetched(true);
+
+    
+  }
+
+  console.log(collectionArray)
+  
   useEffect(() => {
-    
-    const tokenId = params.tokenId;
-    if (!dataFetched) getNFTData(tokenId);
-    
+    const fetchData = async () => {
+      if (!dataFetched && !collectionDataFetched) {
+        await getNFTData();
+        await getCollectionData();
+      }
+    };
+
+    fetchData();
   }, [])
   
-
-
+  
   
 
   return (
@@ -100,7 +163,7 @@ const ProfilePage = () => {
                   No. of NFTs =
                 </h2>
                 <p className="text-2xl text-white mb-3 ml-4 mr-10">
-                  {data.length}
+                  {dataa.length}
                 </p>
               </div>
               <div className="mt-3 md:mt-0 ml-4">
@@ -116,8 +179,22 @@ const ProfilePage = () => {
             Your NFTs
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {data.length > 0 ? (
-              data.map((value, index) => (
+            {dataa.length > 0 ? (
+              dataa.map((value, index) => (
+                <NFTCard data={value} key={index} className="hover:shadow-lg" />
+              ))
+            ) : (
+              <div className="flex items-center justify-center h-48 bg-gray-200 rounded-lg">
+                <p className="text-xl">Loading your NFTs...</p>
+              </div>
+            )}
+          </div>
+          <h2 className="text-2xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-800 to-yellow-400 bg-clip-text text-transparent">
+            Your NFT Collections
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {collectionData.length > 0 ? (
+              collectionData.map((value, index) => (
                 <NFTCard data={value} key={index} className="hover:shadow-lg" />
               ))
             ) : (
@@ -127,7 +204,7 @@ const ProfilePage = () => {
             )}
           </div>
 
-          {data.length === 0 && (
+          {dataa.length === 0 && (
             <p className="text-center mt-8 text-lg text-gray-500">
               No NFTs found in your collection. Connect your wallet or start
               exploring NFTs to add them here!

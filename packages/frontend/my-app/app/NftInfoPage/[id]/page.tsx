@@ -2,13 +2,14 @@
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import { GetIpfsUrlFromPinata } from "../../utils/util";
+import { marketPlaceAddress } from "../../utils/constants";
 import axios from "axios";
 import nftMarketPlaceABI from "../../abis/nftMarketPlaceABI.json";
 import { readContract, writeContract } from "wagmi/actions";
 import { useAccount } from "wagmi";
 import { formatEther, parseEther } from "viem";
 const NftInfoPage = () => {
-  const contractAddress = "0xbB6EB8CfA4790Aeb1AA6258c5A03DBD4f3Ac2386";
+  
   const account = useAccount();
   const [data, updateData] = useState({});
   const [dataFetched, updateDataFetched] = useState(false);
@@ -22,7 +23,7 @@ const NftInfoPage = () => {
       updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
       //run the executeSale function
       await writeContract({
-        address: contractAddress,
+        address: marketPlaceAddress,
         abi: nftMarketPlaceABI,
         functionName: "executeSale",
         args: [tokenId],
@@ -40,13 +41,13 @@ const NftInfoPage = () => {
     console.log(tokenId);
 
     let tokenURI = await readContract({
-      address: contractAddress,
+      address: marketPlaceAddress,
       abi: nftMarketPlaceABI,
       functionName: "tokenURI",
       args: [tokenId],
     });
     const listedNft = await readContract({
-      address: contractAddress,
+      address: marketPlaceAddress,
       abi: nftMarketPlaceABI,
       functionName: "getListedNftForId",
       args: [tokenId],

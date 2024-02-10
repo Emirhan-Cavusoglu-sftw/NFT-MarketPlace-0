@@ -1,13 +1,14 @@
 "use client";
 import React from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../utils/pinata";
+import { marketPlaceAddress } from "../utils/constants";
 import { useState } from "react";
 import { useContractRead, useContractWrite, useAccount } from "wagmi";
 import { writeContract } from "wagmi/actions";
 import nftMarketPlaceABI from "../abis/nftMarketPlaceABI.json";
 import { parseEther, formatEther } from "viem";
 const Page = () => {
-  const contractAddress = "0xbB6EB8CfA4790Aeb1AA6258c5A03DBD4f3Ac2386";
+  
   const [formParams, updateFormParams] = useState({
     name: "",
     description: "",
@@ -19,25 +20,15 @@ const Page = () => {
   const [enableButton, setEnableButton] = useState(false);
 
   // WAGMI HOOKS
-  const {
-    data: dataPay,
-    isLoading: loadingPay,
-    isSuccess: successPay,
-    write: createToken,
-  } = useContractWrite({
-    address: contractAddress,
-    abi: nftMarketPlaceABI,
-    functionName: "createToken",
-  });
 
   const { data: listingPrice } = useContractRead({
-    address: contractAddress,
+    address: marketPlaceAddress,
     abi: nftMarketPlaceABI,
     functionName: "getListPrice",
   });
 
   // const listedPrice = listingPrice?.toString();
-  const listedPrice= listingPrice
+  const listedPrice = listingPrice;
   // console.log(listedPrice);
 
   async function OnChangeFile(e: any) {
@@ -103,7 +94,7 @@ const Page = () => {
       console.log("listedPrice", listedPrice);
 
       await writeContract({
-        address: contractAddress,
+        address: marketPlaceAddress,
         abi: nftMarketPlaceABI,
         functionName: "createToken",
         args: [metadataURL, price],
@@ -184,7 +175,7 @@ const Page = () => {
             Upload Image (&lt;1000 KB)
           </label>
           <div className="flex items-center justify-between bg-gray-100 border-2 border-gray-200 rounded-md py-2 px-4">
-          <input type={"file"} onChange={OnChangeFile} />
+            <input type={"file"} onChange={OnChangeFile} />
           </div>
         </div>
         <div className="text-red-500 text-sm mb-4 text-center">{message}</div>
@@ -206,7 +197,6 @@ const Page = () => {
       </form>
     </div>
   );
-  
 };
 
 export default Page;

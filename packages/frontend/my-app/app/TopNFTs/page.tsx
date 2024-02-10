@@ -4,6 +4,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import NFTCard from "../components/NFTCard";
 import Link from "next/link";
 import nftMarketPlaceABI from "../abis/nftMarketPlaceABI.json";
+import { marketPlaceAddress } from "../utils/constants";
 import { useState } from "react";
 import { readContract } from "wagmi/actions";
 import { formatEther } from "viem";
@@ -11,11 +12,11 @@ import axios from "axios";
 export default function Home() {
   const [data, updateData] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
-  const contractAddress = "0xbB6EB8CfA4790Aeb1AA6258c5A03DBD4f3Ac2386";
+  
 
   async function getNFTData() {
     let transaction = await readContract({
-      address: contractAddress,
+      address: marketPlaceAddress,
       abi: nftMarketPlaceABI,
       functionName: "getAllNFTs",
     });
@@ -23,7 +24,7 @@ export default function Home() {
     const items = await Promise.all(
       transaction.map(async (i) => {
         const tokenURI = await readContract({
-          address: contractAddress,
+          address: marketPlaceAddress,
           abi: nftMarketPlaceABI,
           functionName: "tokenURI",
           args: [i.tokenId],
