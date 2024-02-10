@@ -6,38 +6,61 @@ import Link from "next/link";
 import { collectionFactoryAddress, marketPlaceAddress } from "./utils/constants";
 import nftMarketPlaceABI from "./abis/nftMarketPlaceABI.json";
 import collectionFactoryABI from "./abis/collectionFactoryABI.json";
+import collectionABI from "./abis/collectionABI.json";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { readContract } from "wagmi/actions";
 import { formatEther } from "viem";
 import axios from "axios";
+import NFTCollectionCard from "./components/NFTCollectionCard";
 export default function Home() {
   const [data, updateData] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
   
   const [collectionData, updateCollectionData] = useState([]);
   const [collectionArray, updateCollectionArray] = useState([]);
+  const [collectionDataFetched, collectionUpdateFetched] = useState(false);
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!dataFetched && !collectionDataFetched) {
+        await getNFTData();
+        await getCollectionData();
+      }
+    };
+
+    fetchData();
+  }, [])
   
   async function getCollectionData() {
     let sumPrice = 0;
     
-    
-    let collections = await readContract({
+    let numberOfCollections = await readContract({
       address: collectionFactoryAddress,
       abi: collectionFactoryABI,
-      functionName: "listOfNFTCollectionContracts",
-      args: [0],
+      functionName: "numberOfCreatedCollection",
+      
     });
 
-    console.log(data);
+    for(let i = 0; i < numberOfCollections; i++){
 
-    // const data = await readContract({
+      let collectionAddress = await readContract({
+        address: collectionFactoryAddress,
+        abi: collectionFactoryABI,
+        functionName: "listOfNFTCollectionContracts",
+        args: [i],
+      });
+      collectionArray.push(collectionAddress);
+    }
+
+ 
     
     
     
     
     const items = await Promise.all(
-      data.map(async (i) => {
+      collectionArray.map(async (i) => {
         const tokenURI = await readContract({
           address: i,
           abi: collectionABI,
@@ -101,7 +124,7 @@ export default function Home() {
     updateData(items.slice(2));
     updateFetched(true);
   }
-  if (!dataFetched) getNFTData();
+  
   return (
     <div className="flex flex-col place-items-center mt-20 pagebackground">
       <Link href={"/TopNFTs"}><div className="md:text-xl font-bold text-white">Top NFTs</div></Link>
@@ -112,7 +135,12 @@ export default function Home() {
         })}
       </div>
 
-      <div className="md:text-xl font-bold text-white">Collections</div>
+      <Link href={"/TopCollections"}><div className="md:text-xl font-bold text-white">Top NFTs</div></Link>
+      <div className="flex mt-5 justify-between flex-wrap max-w-screen-xl text-center">
+        {collectionData?.map((value, index) => {
+          return <NFTCollectionCard data={value} key={index}></NFTCollectionCard>;
+        })}
+      </div>
     </div>
 
   );
