@@ -51,28 +51,24 @@ const NFTCollectionPage = () => {
     abi: collectionABI,
     functionName: "calculateTotalPrice",
   });
-  
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!dataFetched ) {
+      if (!dataFetched) {
         await getNFTsData(contractAddress);
-      
       }
     };
 
     fetchData();
-  }, [])
+  }, []);
 
   async function getNFTsData(contractAddress) {
-    
-
     let transaction = await readContract({
       address: contractAddress,
       abi: collectionABI,
       functionName: "getAllNFTs",
     });
-    // console.log(transaction[0].seller);
+
     transaction = transaction.filter((i) => i.seller == account.address);
 
     const items = await Promise.all(
@@ -93,26 +89,24 @@ const NFTCollectionPage = () => {
           tokenId: i.tokenId,
           seller: i.seller,
           owner: i.owner,
-          image: meta.image, 
+          image: meta.image,
           name: meta.name,
           description: meta.description,
         };
-        
+
         return item;
       })
     );
     updateDataa(items);
     updatenftFetched(true);
-
-    
   }
   async function buyNFTCollection(contractAddress) {
     try {
-      //Pull the deployed contract instance
+      
 
       const collectionPrice = parseEther(totalPrice);
       updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
-      //run the executeSale function
+      
       await writeContract({
         address: contractAddress,
         abi: nftMarketPlaceABI,
@@ -145,7 +139,7 @@ const NFTCollectionPage = () => {
       functionName: "owner",
     });
     console.log(totalPrice);
-   
+
     tokenURI = GetIpfsUrlFromPinata(tokenURI);
     let meta = await axios.get(tokenURI);
     console.log(meta);
@@ -165,9 +159,9 @@ const NFTCollectionPage = () => {
 
   async function OnChangeFile(e: any) {
     var file = e.target.files[0];
-    //check for file extension
+    
     try {
-      //upload the file to IPFS
+      
       updateMessage("Uploading image to IPFS.. please wait!");
       const response = await uploadFileToIPFS(file);
       if (response.success === true) {
@@ -185,7 +179,7 @@ const NFTCollectionPage = () => {
   }
   async function uploadMetadataToIPFS() {
     const { name, description, price } = formParams;
-    //Make sure that none of the fields are empty
+    
     if (!name || !description || !price || !isFileUploaded) {
       updateMessage("Please fill all the fields!");
       return -1;
@@ -199,7 +193,7 @@ const NFTCollectionPage = () => {
     };
 
     try {
-      //upload the metadata JSON to IPFS
+      
       const response = await uploadJSONToIPFS(nftJSON);
       if (response.success === true) {
         console.log("Uploaded JSON to Pinata: ", response);
@@ -232,7 +226,6 @@ const NFTCollectionPage = () => {
         args: [metadataURL, price],
         value: listedPrice,
       });
-      
 
       alert("Successfully listed your NFT!");
 
@@ -243,13 +236,12 @@ const NFTCollectionPage = () => {
   }
 
   if (!dataFetched) getNFTData(contractAddress);
-  
+
   if (typeof data.image == "string")
     data.image = GetIpfsUrlFromPinata(data.image);
 
   return (
     <>
-    
       <div className="flex items-center justify-center mt-10">
         <div className="bg-gradient-to-r from-yellow-800 to-yellow-400  rounded-lg shadow-lg overflow-hidden">
           <img src={data.image} alt="" className="w-full h-64 object-cover" />
@@ -269,7 +261,8 @@ const NFTCollectionPage = () => {
             {/* <div className="text-white">Seller: <span className="font-semibold">{data.seller}</span></div> */}
           </div>
           <div className="px-6 py-4 flex justify-center items-center">
-            {account.address !== data.owner && account.address !== data.seller ? (
+            {account.address !== data.owner &&
+            account.address !== data.seller ? (
               <button
                 className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
                 onClick={() => buyNFTCollection(contractAddress)}
@@ -285,109 +278,112 @@ const NFTCollectionPage = () => {
         </div>
       </div>
       <>
-      
-      <div className="flex flex-col items-center mt-10 ">
-        <form className="w-full max-w-lg bg-gradient-to-r from-yellow-800 to-yellow-400 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 ">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent mb-8 text-center">
-            Upload Your NFT to the Marketplace
-          </h2>
-          <div className="mb-6">
-            <label
-              className="block 
+        <div className="flex flex-col items-center mt-10 ">
+          <form className="w-full max-w-lg bg-gradient-to-r from-yellow-800 to-yellow-400 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 ">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent mb-8 text-center">
+              Upload Your NFT to the Marketplace
+            </h2>
+            <div className="mb-6">
+              <label
+                className="block 
             bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
-              htmlFor="name"
-            >
-              NFT Name
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="name"
-              type="text"
-              placeholder="Axie#4563"
-              onChange={(e) =>
-                updateFormParams({ ...formParams, name: e.target.value })
-              }
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
-              htmlFor="description"
-            >
-              NFT Description
-            </label>
-            <textarea
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="description"
-              placeholder="Axie Infinity Collection"
-              onChange={(e) =>
-                updateFormParams({ ...formParams, description: e.target.value })
-              }
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
-              htmlFor="price"
-            >
-              Price (in ETH)
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="number"
-              placeholder="Min 0.01 ETH"
-              step="0.01"
-              onChange={(e) =>
-                updateFormParams({ ...formParams, price: e.target.value })
-              }
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
-              htmlFor="image"
-            >
-              Upload Image (&lt;1000 KB)
-            </label>
-            <div className="flex items-center justify-between bg-gray-100 border-2 border-gray-200 rounded-md py-2 px-4">
-              <input type={"file"} onChange={OnChangeFile} />
+                htmlFor="name"
+              >
+                NFT Name
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="name"
+                type="text"
+                placeholder="Axie#4563"
+                onChange={(e) =>
+                  updateFormParams({ ...formParams, name: e.target.value })
+                }
+              />
             </div>
-          </div>
-          <div className="text-red-500 text-sm mb-4 text-center">{message}</div>
-          {enableButton ? (
-            <button
-              className="w-full bg-purple-600 hover:bg-purple-700 bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              onClick={(e) => createNFT(e, contractAddress)}
-            >
-              Create NFT
-            </button>
-          ) : (
-            <button
-              disabled
-              className="w-full bg-gray-400 text-white font-bold py-2 px-4 rounded cursor-not-allowed"
-            >
-              Create NFT
-            </button>
-          )}
-        </form>
-      </div>
-      <div>
-
-      <h2 className="text-2xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-800 to-yellow-400 bg-clip-text text-transparent">
-        Your NFTs
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {dataa.length > 0 ? (
-          dataa.map((value, index) => (
-            <NFTCard data={value} key={index} className="hover:shadow-lg" />
-            ))
+            <div className="mb-6">
+              <label
+                className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+                htmlFor="description"
+              >
+                NFT Description
+              </label>
+              <textarea
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="description"
+                placeholder="Axie Infinity Collection"
+                onChange={(e) =>
+                  updateFormParams({
+                    ...formParams,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="mb-6">
+              <label
+                className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+                htmlFor="price"
+              >
+                Price (in ETH)
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="number"
+                placeholder="Min 0.01 ETH"
+                step="0.01"
+                onChange={(e) =>
+                  updateFormParams({ ...formParams, price: e.target.value })
+                }
+              />
+            </div>
+            <div className="mb-6">
+              <label
+                className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+                htmlFor="image"
+              >
+                Upload Image (&lt;1000 KB)
+              </label>
+              <div className="flex items-center justify-between bg-gray-100 border-2 border-gray-200 rounded-md py-2 px-4">
+                <input type={"file"} onChange={OnChangeFile} />
+              </div>
+            </div>
+            <div className="text-red-500 text-sm mb-4 text-center">
+              {message}
+            </div>
+            {enableButton ? (
+              <button
+                className="w-full bg-purple-600 hover:bg-purple-700 bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                onClick={(e) => createNFT(e, contractAddress)}
+              >
+                Create NFT
+              </button>
+            ) : (
+              <button
+                disabled
+                className="w-full bg-gray-400 text-white font-bold py-2 px-4 rounded cursor-not-allowed"
+              >
+                Create NFT
+              </button>
+            )}
+          </form>
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-800 to-yellow-400 bg-clip-text text-transparent">
+            Your NFTs
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {dataa.length > 0 ? (
+              dataa.map((value, index) => (
+                <NFTCard data={value} key={index} className="hover:shadow-lg" />
+              ))
             ) : (
               <div className="flex items-center justify-center h-48 bg-gray-200 rounded-lg">
-            <p className="text-xl">Loading your NFTs...</p>
+                <p className="text-xl">Loading your NFTs...</p>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      </div>
+        </div>
       </>
     </>
   );
@@ -396,4 +392,3 @@ const NFTCollectionPage = () => {
 export default dynamic(() => Promise.resolve(NFTCollectionPage), {
   ssr: false,
 });
-
