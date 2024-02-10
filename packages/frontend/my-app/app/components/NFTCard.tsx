@@ -1,3 +1,4 @@
+
 import React from "react";
 import Link from "next/link";
 import { GetIpfsUrlFromPinata } from "../utils/util";
@@ -17,8 +18,10 @@ const NFTCard = ({ data }: any) => {
           alt=""
           className="w-44 h-44 rounded-lg object-cover"
         /></Link>
-        <div className="text-white w-full p-2 bg-gradient-to-t from-[#454545] to-transparent rounded-lg pt-5 -mt-20">
+        <div className="text-white w-full p-2 bg-gradient-to-t from-[#454545] to-transparent rounded-lg pt-5 -mt-20 ">
+          <div className="overflow-hidden whitespace-nowrap text-overflow-ellipsis max-w-[15ch]">
           <strong className="text-xl">{data.name}</strong>
+          </div>
           <p className="display-inline">{data.description}</p>
         </div>
       </div>

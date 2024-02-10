@@ -47,7 +47,7 @@ export default function Home() {
         return item;
       })
     );
-    updateData(items);
+    updateData(items.slice(8));
     updateFetched(true);
   }
   if (!dataFetched) getNFTData();
