@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import NFTCard from "./components/NFTCard";
+import NFTCard from "../components/NFTCard";
 import Link from "next/link";
-import nftMarketPlaceABI from "./abis/nftMarketPlaceABI.json";
+import nftMarketPlaceABI from "../abis/nftMarketPlaceABI.json";
 import { useState } from "react";
 import { readContract } from "wagmi/actions";
 import { formatEther } from "viem";
@@ -53,9 +53,9 @@ export default function Home() {
   if (!dataFetched) getNFTData();
   return (
     <div className="flex flex-col place-items-center mt-20 pagebackground">
-      <Link href={"/TopNFTs"}><div className="md:text-xl font-bold text-white">Top NFTs</div></Link>
+      <div className="md:text-xl font-bold text-white">Top NFTs</div>
 
-      <div className="flex mt-5 justify-between flex-wrap max-w-screen-xl text-center">
+      <div className="flex mt-5 flex-wrap max-w-screen-xl text-center">
         {data?.map((value, index) => {
           return <NFTCard data={value} key={index}></NFTCard>;
         })}
