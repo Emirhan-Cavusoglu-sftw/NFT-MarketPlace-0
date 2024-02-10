@@ -3,8 +3,10 @@ import Image from "next/image";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import NFTCard from "./components/NFTCard";
 import Link from "next/link";
-import { marketPlaceAddress } from "./utils/constants";
+import { collectionFactoryAddress, marketPlaceAddress } from "./utils/constants";
 import nftMarketPlaceABI from "./abis/nftMarketPlaceABI.json";
+import collectionFactoryABI from "./abis/collectionFactoryABI.json";
+
 import { useState } from "react";
 import { readContract } from "wagmi/actions";
 import { formatEther } from "viem";
@@ -13,7 +15,55 @@ export default function Home() {
   const [data, updateData] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
   
+  const [collectionData, updateCollectionData] = useState([]);
+  const [collectionArray, updateCollectionArray] = useState([]);
+  
+  async function getCollectionData() {
+    let sumPrice = 0;
+    
+    
+    let collections = await readContract({
+      address: collectionFactoryAddress,
+      abi: collectionFactoryABI,
+      functionName: "listOfNFTCollectionContracts",
+      args: [0],
+    });
 
+    console.log(data);
+
+    // const data = await readContract({
+    
+    
+    
+    
+    const items = await Promise.all(
+      data.map(async (i) => {
+        const tokenURI = await readContract({
+          address: i,
+          abi: collectionABI,
+          functionName: "collectionURI",
+          
+        });
+
+        let meta = await axios.get(tokenURI as string);
+        meta = meta.data;
+
+        
+        let item = {
+          address: i,
+          image: meta.image, // Access the 'data' property of the 'meta' object to get the image property
+          name: meta.name,
+          description: meta.description,
+        };
+        
+        return item;
+      })
+    );
+    updateCollectionData(items);
+    collectionUpdateFetched(true);
+
+    
+  }
   async function getNFTData() {
     let transaction = await readContract({
       address: marketPlaceAddress,
@@ -48,7 +98,7 @@ export default function Home() {
         return item;
       })
     );
-    updateData(items.slice(8));
+    updateData(items.slice(2));
     updateFetched(true);
   }
   if (!dataFetched) getNFTData();
