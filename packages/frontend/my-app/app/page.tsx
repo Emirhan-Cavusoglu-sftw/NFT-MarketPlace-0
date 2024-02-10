@@ -60,7 +60,10 @@ export default function Home() {
           return <NFTCard data={value} key={index}></NFTCard>;
         })}
       </div>
+
+      <div className="md:text-xl font-bold text-white">Collections</div>
     </div>
+
   );
 }
 

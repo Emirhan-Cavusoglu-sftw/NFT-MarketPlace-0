@@ -28,9 +28,9 @@ export default function Header() {
             </Link>
           </li>
           <li className="w-2/6 ">
-            <ul className="lg:flex justify-between font-bold mr-15 pb-2 text-lg ">
+            <ul className="lg:flex justify-between font-bold mr-18 text-lg space-x-10">
               {pathname === "/" ? (
-                <li className="border-b-2 ">
+                <li className="border-b-2">
                   <Link href="/">Marketplace</Link>
                 </li>
               ) : (
@@ -38,13 +38,22 @@ export default function Header() {
                   <Link href="/">Marketplace</Link>
                 </li>
               )}
-              {pathname === "/BuySellNFT" ? (
+              {pathname === "/CreateNFT" ? (
                 <li className="border-b-2 ">
-                  <Link href="/BuySellNFT">Create My NFT</Link>
+                  <Link href="/CreateNFT">Create My NFT</Link>
                 </li>
               ) : (
                 <li className="hover:border-b-2 ">
-                  <Link href="/BuySellNFT">Create My NFT</Link>
+                  <Link href="/CreateNFT">Create My NFT</Link>
+                </li>
+              )}
+              {pathname === "/CreateCollection" ? (
+                <li className="border-b-2 ">
+                  <Link href="/CreateCollection">Create My Collection</Link>
+                </li>
+              ) : (
+                <li className="hover:border-b-2 ">
+                  <Link href="/CreateCollection">Create My Collection</Link>
                 </li>
               )}
               {pathname === "/ProfilePage" ? (
