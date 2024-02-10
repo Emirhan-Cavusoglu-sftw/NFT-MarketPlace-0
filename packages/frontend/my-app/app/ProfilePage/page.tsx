@@ -12,6 +12,7 @@ import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import collectionFactoryABI from "../abis/collectionFactoryABI.json";
 import collectionABI from "../abis/collectionABI.json";
+import NFTCollectionCard from "../components/NFTCollectionCard";
 const ProfilePage = () => {
   
   const [dataa, updateData] = useState([]);
@@ -111,7 +112,7 @@ const ProfilePage = () => {
 
         
         let item = {
-          
+          address: i,
           image: meta.image, // Access the 'data' property of the 'meta' object to get the image property
           name: meta.name,
           description: meta.description,
@@ -195,7 +196,7 @@ const ProfilePage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {collectionData.length > 0 ? (
               collectionData.map((value, index) => (
-                <NFTCard data={value} key={index} className="hover:shadow-lg" />
+                <NFTCollectionCard data={value} key={index} className="hover:shadow-lg" />
               ))
             ) : (
               <div className="flex items-center justify-center h-48 bg-gray-200 rounded-lg">
