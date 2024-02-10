@@ -81,21 +81,21 @@ const NftInfoPage = () => {
 
     return (
       <div className="flex items-center justify-center mt-10">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-gradient-to-r from-yellow-800 to-yellow-400  rounded-lg shadow-lg overflow-hidden">
           <img src={data.image} alt="" className="w-full h-64 object-cover" />
           <div className="px-6 py-4">
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">{data.name}</h2>
-            <p className="text-gray-700">{data.description}</p>
+            <h2 className="text-xl font-semibold text-white mb-2">{data.name}</h2>
+            <p className="text-white">{data.description}</p>
           </div>
           <div className="px-6 py-4">
-            <div className="text-gray-700">Price: <span className="font-semibold">{data.price} ETH</span></div>
-            <div className="text-gray-700">Owner: <span className="font-semibold">{data.owner}</span></div>
-            <div className="text-gray-700">Seller: <span className="font-semibold">{data.seller}</span></div>
+            <div className="text-white">Price: <span className="font-semibold">{data.price} ETH</span></div>
+            <div className="text-white">Owner: <span className="font-semibold">{data.owner}</span></div>
+            <div className="text-white">Seller: <span className="font-semibold">{data.seller}</span></div>
           </div>
           <div className="px-6 py-4 flex justify-center items-center">
             {currAddress !== data.owner && currAddress !== data.seller ? (
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm"
+                className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
                 onClick={() => buyNFT(tokenId)}
               >
                 Buy this NFT
