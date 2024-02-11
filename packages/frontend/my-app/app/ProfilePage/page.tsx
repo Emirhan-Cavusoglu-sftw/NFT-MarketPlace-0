@@ -14,7 +14,7 @@ import collectionFactoryABI from "../abis/collectionFactoryABI.json";
 import collectionABI from "../abis/collectionABI.json";
 import NFTCollectionCard from "../components/NFTCollectionCard";
 const ProfilePage = () => {
-  
+ 
   const [dataa, updateData] = useState([]);
   const [collectionData, updateCollectionData] = useState([]);
   const [collectionArray, updateCollectionArray] = useState([]);
@@ -24,14 +24,14 @@ const ProfilePage = () => {
   const [totalPrice, updateTotalPrice] = useState("0");
   const account = useAccount();
 
-  const { data, isError, isLoading } = useContractRead({
-    address: collectionFactoryAddress,
-    abi: collectionFactoryABI,
-    functionName: 'getUserCollection',
-    account: account.address,
-  })
+  // const { data, isError, isLoading } = useContractRead({
+  //   address: collectionFactoryAddress,
+  //   abi: collectionFactoryABI,
+  //   functionName: 'getUserCollection',
+  //   account: account.address,
+  // })
 
-  
+   
 
   async function getNFTData() {
     let sumPrice = 0;
@@ -77,29 +77,29 @@ const ProfilePage = () => {
   }
   
   async function getCollectionData() {
-    let sumPrice = 0;
     
-    let numberOfCollections = await readContract({
+    
+    const numberOfCollections = await readContract({
       address: collectionFactoryAddress,
       abi: collectionFactoryABI,
       functionName: "numberOfCreatedCollectionPerUser",
       args: [account.address],
     });
 
-    console.log(data);
+    
 
-    // const data = await readContract({
-    //   address: collectionFactoryAddress,
-    //   abi: collectionFactoryABI,
-    //   functionName: "getUserCollection",
-      
-    // });
+    const data = await readContract({
+      address: collectionFactoryAddress,
+      abi: collectionFactoryABI,
+      functionName: "getUserCollection",
+      account: account.address,
+    });
     
     
     
     
     const items = await Promise.all(
-      data.map(async (i) => {
+      data.slice(0,Number(numberOfCollections)).map(async (i) => {
         const tokenURI = await readContract({
           address: i,
           abi: collectionABI,
@@ -127,7 +127,7 @@ const ProfilePage = () => {
     
   }
 
-  console.log(collectionArray)
+  
   
   useEffect(() => {
     const fetchData = async () => {
