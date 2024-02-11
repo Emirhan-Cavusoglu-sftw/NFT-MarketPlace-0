@@ -50,6 +50,11 @@ const NFTCollectionPage = () => {
     abi: collectionABI,
     functionName: "calculateTotalPrice",
   });
+  const { data: id } = useContractRead({
+    address: contractAddress,
+    abi: collectionABI,
+    functionName: "collectionId",
+  });
 
   
   
@@ -63,15 +68,7 @@ const NFTCollectionPage = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!dataFetched) {
-        await getNFTsData(contractAddress);
-      }
-    };
-
-    fetchData();
-  }, []);
+  
 
   async function getNFTsData(contractAddress) {
     let transaction = await readContract({
@@ -123,7 +120,14 @@ const NFTCollectionPage = () => {
         account: account.address,
         value: price ,
       });
-
+      await writeContract({
+        address: collectionFactoryAddress,
+        abi: collectionFactoryABI,
+        functionName: "updateUserData",
+        account: account.address,
+        args: [id],
+      });
+      
       alert("You successfully bought the NFT Collection!");
       updateMessage("");
     } catch (e) {

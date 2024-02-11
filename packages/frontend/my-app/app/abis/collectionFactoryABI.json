@@ -2,20 +2,42 @@
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "addressToNftCollection",
-		"outputs": [
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_symbol",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_tokenURI",
+				"type": "string"
+			},
 			{
 				"internalType": "address",
-				"name": "",
+				"name": "owner",
 				"type": "address"
 			}
 		],
-		"stateMutability": "view",
+		"name": "createNFTCollectionContract",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"name": "updateUserData",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -45,29 +67,39 @@
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_symbol",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_tokenURI",
-				"type": "string"
-			},
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "collectionIdToAddress",
+		"outputs": [
 			{
 				"internalType": "address",
-				"name": "owner",
+				"name": "",
 				"type": "address"
 			}
 		],
-		"name": "createNFTCollectionContract",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "collectionIdToUser",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{

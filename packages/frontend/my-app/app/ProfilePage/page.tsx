@@ -95,11 +95,11 @@ const ProfilePage = () => {
       account: account.address,
     });
     
-    
+    console.log(data[0]);
     
     
     const items = await Promise.all(
-      data.slice(0,Number(numberOfCollections)).map(async (i) => {
+      data.slice(0,Number(numberOfCollections)+1).map(async (i) => {
         const tokenURI = await readContract({
           address: i,
           abi: collectionABI,
