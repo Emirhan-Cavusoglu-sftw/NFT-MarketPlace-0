@@ -20,17 +20,17 @@ const Page = () => {
   const [message, updateMessage] = useState("");
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [enableButton, setEnableButton] = useState(false);
-
-  // WAGMI HOOKS
+  const account = useAccount();
+  
 
   
   
 
   async function OnChangeFile(e: any) {
     var file = e.target.files[0];
-    //check for file extension
+    
     try {
-      //upload the file to IPFS
+      
       updateMessage("Uploading image to IPFS.. please wait!");
       const response = await uploadFileToIPFS(file);
       if (response.success === true) {
@@ -74,7 +74,7 @@ const Page = () => {
     }
   }
 
-  async function createNFT(e: any) {
+  async function createNFTCollection(e: any) {
     e.preventDefault();
 
     try {
@@ -94,7 +94,7 @@ const Page = () => {
         address: collectionFactoryAddress,
         abi: collectionFactoryABI,
         functionName: "createNFTCollectionContract",
-        args: [name,symbol,metadataURL ]
+        args: [name,symbol,metadataURL,account.address ]
         
       });
       
@@ -111,7 +111,7 @@ const Page = () => {
     <div className="flex flex-col items-center mt-10 ">
       <form className="w-full max-w-lg bg-gradient-to-r from-yellow-800 to-yellow-400 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 ">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent mb-8 text-center">
-          Upload Your NFT to the Marketplace
+          Create Your Own NFT Collection
         </h2>
         <div className="mb-6">
           <label
@@ -163,23 +163,7 @@ const Page = () => {
             }
           />
         </div>
-        {/* <div className="mb-6">
-          <label
-            className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
-            htmlFor="price"
-          >
-            Price (in ETH)
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            type="number"
-            placeholder="Min 0.01 ETH"
-            step="0.01"
-            onChange={(e) =>
-              updateFormParams({ ...formParams, price: e.target.value })
-            }
-          />
-        </div> */}
+       
         <div className="mb-6">
           <label
             className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
@@ -195,7 +179,7 @@ const Page = () => {
         {enableButton ? (
           <button
             className="w-full bg-purple-600 hover:bg-purple-700 bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            onClick={createNFT}
+            onClick={createNFTCollection}
           >
             Create NFT Collection
           </button>
