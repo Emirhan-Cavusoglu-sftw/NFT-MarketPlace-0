@@ -17,11 +17,11 @@ const NftInfoPage = () => {
   const [currAddress, updateCurrAddress] = useState("0x");
   async function buyNFT(tokenId) {
     try {
-      //Pull the deployed contract instance
+      
 
       const salePrice = parseEther(data.price);
       updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
-      //run the executeSale function
+      
       await writeContract({
         address: marketPlaceAddress,
         abi: nftMarketPlaceABI,
@@ -38,7 +38,7 @@ const NftInfoPage = () => {
   }
 
   async function getNFTData(tokenId) {
-    console.log(tokenId);
+    
 
     let tokenURI = await readContract({
       address: marketPlaceAddress,
@@ -54,9 +54,9 @@ const NftInfoPage = () => {
     });
     tokenURI = GetIpfsUrlFromPinata(tokenURI);
     let meta = await axios.get(tokenURI);
-    console.log(meta);
+    
     meta = meta.data;
-
+    
     let item = {
       price: meta.price,
       tokenId: tokenId,
@@ -66,16 +66,16 @@ const NftInfoPage = () => {
       name: meta.name,
       description: meta.description,
     };
-    console.log(item);
+    
     updateData(item);
     updateDataFetched(true);
   }
-  console.log(data);
+  
   const params = useParams();
   const tokenId = params.id;
 
   if (!dataFetched) getNFTData(tokenId);
-  console.log(tokenId);
+  
   if (typeof data.image == "string")
     data.image = GetIpfsUrlFromPinata(data.image);
 

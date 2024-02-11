@@ -22,21 +22,20 @@ const NFTCollectionPage = () => {
     description: "",
     price: "",
   });
-  const [dataa, updateDataa] = useState([]);
+  const [nftsData, updateNFTsData] = useState([]);
   const [dataFetched, updateDataFetched] = useState(false);
 
   const [fileURL, setFileURL] = useState(null);
-  // const [message, updateMessage] = useState("");
+
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [enableButton, setEnableButton] = useState(false);
   const params = useParams();
   const contractAddress = params.address;
   const account = useAccount();
   const [data, updateData] = useState({});
-  const [nftdataFetched, updatenftFetched] = useState(false);
+  const [nftdataFetched, updateNftDataFetched] = useState(false);
   const [message, updateMessage] = useState("");
-  const [currAddress, updateCurrAddress] = useState("0x");
-  // const [dataFetched, updateFetched] = useState(false);
+  
 
   const { data: listingPrice } = useContractRead({
     address: contractAddress,
@@ -51,6 +50,18 @@ const NFTCollectionPage = () => {
     abi: collectionABI,
     functionName: "calculateTotalPrice",
   });
+
+  
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!dataFetched && !nftdataFetched) {
+        await getNFTsData(contractAddress);
+        await getNFTData(contractAddress);
+      }}
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,25 +108,23 @@ const NFTCollectionPage = () => {
         return item;
       })
     );
-    updateDataa(items);
-    updatenftFetched(true);
+    updateNFTsData(items);
+    updateNftDataFetched(true);
   }
+  
   async function buyNFTCollection(contractAddress) {
     try {
-      
-
-      const collectionPrice = parseEther(totalPrice);
+      const price = parseEther(formatEther(totalPrice))
       updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
-      
       await writeContract({
         address: contractAddress,
-        abi: nftMarketPlaceABI,
+        abi: collectionABI,
         functionName: "sellTheCollection",
-
-        value: collectionPrice,
+        account: account.address,
+        value: price ,
       });
 
-      alert("You successfully bought the NFT!");
+      alert("You successfully bought the NFT Collection!");
       updateMessage("");
     } catch (e) {
       alert("Upload Error" + e);
@@ -128,6 +137,7 @@ const NFTCollectionPage = () => {
       abi: collectionABI,
       functionName: "collectionURI",
     });
+    console.log(tokenURI);
     let totalPrice = await readContract({
       address: contractAddress,
       abi: collectionABI,
@@ -138,11 +148,11 @@ const NFTCollectionPage = () => {
       abi: collectionABI,
       functionName: "owner",
     });
-    console.log(totalPrice);
+    // console.log(totalPrice);
 
     tokenURI = GetIpfsUrlFromPinata(tokenURI);
     let meta = await axios.get(tokenURI);
-    console.log(meta);
+    
     meta = meta.data;
 
     let item = {
@@ -152,16 +162,39 @@ const NFTCollectionPage = () => {
       name: meta.name,
       description: meta.description,
     };
-    console.log(item);
+    
     updateData(item);
     updateDataFetched(true);
   }
+  async function uploadMetadataToIPFS() {
+    const { name, description, price } = formParams;
 
+    if (!name || !description || !price || !isFileUploaded) {
+      updateMessage("Please fill all the fields!");
+      return -1;
+    }
+
+    const nftJSON = {
+      name,
+      description,
+      price,
+      image: fileURL,
+    };
+
+    try {
+      const response = await uploadJSONToIPFS(nftJSON);
+      if (response.success === true) {
+        console.log("Uploaded JSON to Pinata: ", response);
+        return response.pinataURL;
+      }
+    } catch (e) {
+      console.log("error uploading JSON metadata:", e);
+    }
+  }
   async function OnChangeFile(e: any) {
     var file = e.target.files[0];
-    
+
     try {
-      
       updateMessage("Uploading image to IPFS.. please wait!");
       const response = await uploadFileToIPFS(file);
       if (response.success === true) {
@@ -177,34 +210,9 @@ const NFTCollectionPage = () => {
       console.log("Error during file upload", e);
     }
   }
-  async function uploadMetadataToIPFS() {
-    const { name, description, price } = formParams;
-    
-    if (!name || !description || !price || !isFileUploaded) {
-      updateMessage("Please fill all the fields!");
-      return -1;
-    }
 
-    const nftJSON = {
-      name,
-      description,
-      price,
-      image: fileURL,
-    };
-
-    try {
-      
-      const response = await uploadJSONToIPFS(nftJSON);
-      if (response.success === true) {
-        console.log("Uploaded JSON to Pinata: ", response);
-        return response.pinataURL;
-      }
-    } catch (e) {
-      console.log("error uploading JSON metadata:", e);
-    }
-  }
-
-  async function createNFT(e, contractAddress) {
+  // koleksiyona nft ekleme fonksiyonu
+  async function addNftToCollection(e, contractAddress) {
     e.preventDefault();
 
     try {
@@ -216,9 +224,7 @@ const NFTCollectionPage = () => {
       );
 
       const price = parseEther(formParams.price);
-
-      console.log("listedPrice", listedPrice);
-
+      console.log(price);
       await writeContract({
         address: contractAddress,
         abi: collectionABI,
@@ -228,14 +234,10 @@ const NFTCollectionPage = () => {
       });
 
       alert("Successfully listed your NFT!");
-
-      window.location.replace("/");
     } catch (e) {
       alert("Upload error" + e);
     }
   }
-
-  if (!dataFetched) getNFTData(contractAddress);
 
   if (typeof data.image == "string")
     data.image = GetIpfsUrlFromPinata(data.image);
@@ -253,7 +255,9 @@ const NFTCollectionPage = () => {
           </div>
           <div className="px-6 py-4">
             <div className="text-white">
-              Price: <span className="font-semibold">{data.price} ETH</span>
+              Price: <span className="font-semibold">{totalPrice==undefined?0:formatEther(totalPrice)} 
+              
+              ETH</span>
             </div>
             <div className="text-white">
               Owner: <span className="font-semibold">{data.owner}</span>
@@ -354,7 +358,7 @@ const NFTCollectionPage = () => {
             {enableButton ? (
               <button
                 className="w-full bg-purple-600 hover:bg-purple-700 bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                onClick={(e) => createNFT(e, contractAddress)}
+                onClick={(e) => addNftToCollection(e, contractAddress)}
               >
                 Create NFT
               </button>
@@ -373,8 +377,8 @@ const NFTCollectionPage = () => {
             Your NFTs
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {dataa.length > 0 ? (
-              dataa.map((value, index) => (
+            {nftsData.length > 0 ? (
+              nftsData.map((value, index) => (
                 <NFTCard data={value} key={index} className="hover:shadow-lg" />
               ))
             ) : (

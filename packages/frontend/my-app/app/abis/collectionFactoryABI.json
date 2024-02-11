@@ -58,6 +58,11 @@
 				"internalType": "string",
 				"name": "_tokenURI",
 				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
 			}
 		],
 		"name": "createNFTCollectionContract",
