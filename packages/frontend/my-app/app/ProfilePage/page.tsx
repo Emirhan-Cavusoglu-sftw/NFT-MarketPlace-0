@@ -179,7 +179,7 @@ const ProfilePage = () => {
           <h2 className="text-2xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-800 to-yellow-400 bg-clip-text text-transparent">
             Your NFTs
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="flex mt-5 flex-wrap max-w-screen-xl text-center">
             {dataa.length > 0 ? (
               dataa.map((value, index) => (
                 <NFTCard data={value} key={index} className="hover:shadow-lg" />
@@ -193,7 +193,7 @@ const ProfilePage = () => {
           <h2 className="text-2xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-800 to-yellow-400 bg-clip-text text-transparent">
             Your NFT Collections
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="flex mt-5 flex-wrap max-w-screen-xl text-center">
             {collectionData.length > 0 ? (
               collectionData.map((value, index) => (
                 <NFTCollectionCard data={value} key={index} className="hover:shadow-lg" />
