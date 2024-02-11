@@ -42,7 +42,7 @@ export default function Home() {
       
     });
 
-    for(let i = 0; i < numberOfCollections; i++){
+    for(let i = 0; i < Number(numberOfCollections); i++){
 
       let collectionAddress = await readContract({
         address: collectionFactoryAddress,
@@ -50,7 +50,8 @@ export default function Home() {
         functionName: "listOfNFTCollectionContracts",
         args: [i],
       });
-      collectionArray.push(collectionAddress);
+      collectionArray.push(...collectionArray, collectionAddress);
+      console.log(collectionArray);
     }
 
  

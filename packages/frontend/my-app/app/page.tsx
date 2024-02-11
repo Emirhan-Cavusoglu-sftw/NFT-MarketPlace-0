@@ -16,7 +16,7 @@ import NFTCollectionCard from "./components/NFTCollectionCard";
 export default function Home() {
   const [data, updateData] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
-  
+  const array: never[] = [];
   const [collectionData, updateCollectionData] = useState([]);
   const [collectionArray, updateCollectionArray] = useState([]);
   const [collectionDataFetched, collectionUpdateFetched] = useState(false);
@@ -25,8 +25,8 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       if (!dataFetched && !collectionDataFetched) {
-        await getNFTData();
         await getCollectionData();
+        await getNFTData();
       }
     };
 
@@ -35,23 +35,26 @@ export default function Home() {
   
   async function getCollectionData() {
     let sumPrice = 0;
-    
+    console.log("Getting Collection Data");
     let numberOfCollections = await readContract({
       address: collectionFactoryAddress,
       abi: collectionFactoryABI,
       functionName: "numberOfCreatedCollection",
       
     });
-
-    for(let i = 0; i < numberOfCollections; i++){
+    console.log(Number(numberOfCollections));
+    for(let i = 0; i < Number(numberOfCollections); i++){
 
       let collectionAddress = await readContract({
         address: collectionFactoryAddress,
         abi: collectionFactoryABI,
         functionName: "listOfNFTCollectionContracts",
         args: [i],
-      });
-      collectionArray.push(collectionAddress);
+      })
+      array.push(collectionAddress)
+      console.log(array);
+      collectionArray.push(array.pop());
+      
     }
 
  
@@ -74,7 +77,7 @@ export default function Home() {
         
         let item = {
           address: i,
-          image: meta.image, // Access the 'data' property of the 'meta' object to get the image property
+          image: meta.image, 
           name: meta.name,
           description: meta.description,
         };
@@ -82,7 +85,7 @@ export default function Home() {
         return item;
       })
     );
-    updateCollectionData(items);
+    updateCollectionData(items as never[]);
     collectionUpdateFetched(true);
 
     
@@ -105,7 +108,7 @@ export default function Home() {
 
         let meta = await axios.get(tokenURI as string);
         meta = meta.data;
-        console.log(meta);
+        
 
         let price = formatEther(i.price.toString());
         let item = {
@@ -121,7 +124,7 @@ export default function Home() {
         return item;
       })
     );
-    updateData(items.slice(2));
+    updateData(items.slice(0,10));
     updateFetched(true);
   }
   
@@ -135,7 +138,7 @@ export default function Home() {
         })}
       </div>
 
-      <Link href={"/TopCollections"}><div className="md:text-xl font-bold text-white">Top NFTs</div></Link>
+      <Link href={"/TopCollections"}><div className="md:text-xl font-bold text-white">Top Collections</div></Link>
       <div className="flex mt-5 justify-between flex-wrap max-w-screen-xl text-center">
         {collectionData?.map((value, index) => {
           return <NFTCollectionCard data={value} key={index}></NFTCollectionCard>;
