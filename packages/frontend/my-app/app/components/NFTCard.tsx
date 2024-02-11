@@ -23,6 +23,7 @@ const NFTCard = ({ data }: any) => {
           <strong className="text-xl">{data.name}</strong>
           </div>
           <p className="display-inline">{data.description}</p>
+          <strong className="text-xl">{data.price} ETH</strong>
         </div>
       </div>
     
