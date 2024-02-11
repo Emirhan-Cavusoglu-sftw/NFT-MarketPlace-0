@@ -99,7 +99,7 @@ const ProfilePage = () => {
     
     
     const items = await Promise.all(
-      data.slice(0,Number(numberOfCollections)+1).map(async (i) => {
+      data.slice(0,Number(numberOfCollections)).map(async (i) => {
         const tokenURI = await readContract({
           address: i,
           abi: collectionABI,
