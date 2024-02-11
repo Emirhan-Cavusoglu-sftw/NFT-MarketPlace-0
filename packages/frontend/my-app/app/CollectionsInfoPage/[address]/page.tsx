@@ -262,7 +262,7 @@ const NFTCollectionPage = () => {
             <div className="text-white">
               Owner: <span className="font-semibold">{data.owner}</span>
             </div>
-            {/* <div className="text-white">Seller: <span className="font-semibold">{data.seller}</span></div> */}
+            
           </div>
           <div className="px-6 py-4 flex justify-center items-center">
             {account.address !== data.owner &&
