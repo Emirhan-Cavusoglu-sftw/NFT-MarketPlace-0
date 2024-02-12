@@ -16,6 +16,7 @@ import { formatEther, parseEther } from "viem";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "@/app/utils/pinata";
 import NFTCard from "@/app/components/NFTCard";
 import dynamic from "next/dynamic";
+import CollectionNftCard from "@/app/components/CollectionNftCard";
 const NFTCollectionPage = () => {
   const [formParams, updateFormParams] = useState({
     name: "",
@@ -62,7 +63,7 @@ const NFTCollectionPage = () => {
     const fetchData = async () => {
       if (!dataFetched && !nftdataFetched) {
         await getNFTsData(contractAddress);
-        await getNFTData(contractAddress);
+        await getNFTCollectionData(contractAddress);
       }}
 
     fetchData();
@@ -77,7 +78,7 @@ const NFTCollectionPage = () => {
       functionName: "getAllNFTs",
     });
 
-    transaction = transaction.filter((i) => i.seller == account.address);
+   
 
     const items = await Promise.all(
       transaction.map(async (i) => {
@@ -94,6 +95,7 @@ const NFTCollectionPage = () => {
         let price = formatEther(i.price.toString());
         let item = {
           price,
+          collectionAddress:contractAddress,
           tokenId: i.tokenId,
           seller: i.seller,
           owner: i.owner,
@@ -135,7 +137,7 @@ const NFTCollectionPage = () => {
     }
   }
 
-  async function getNFTData(contractAddress) {
+  async function getNFTCollectionData(contractAddress) {
     let tokenURI = await readContract({
       address: contractAddress,
       abi: collectionABI,
@@ -383,7 +385,7 @@ const NFTCollectionPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {nftsData.length > 0 ? (
               nftsData.map((value, index) => (
-                <NFTCard data={value} key={index} className="hover:shadow-lg" />
+                <CollectionNftCard data={value} key={index} className="hover:shadow-lg" />
               ))
             ) : (
               <div className="flex items-center justify-center h-48 bg-gray-200 rounded-lg">
