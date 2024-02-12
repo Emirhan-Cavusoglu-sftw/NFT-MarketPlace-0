@@ -36,13 +36,18 @@ contract NFTCollection is ERC721URIStorage {
 
     mapping(uint256 => ListedNft) public idToListedNft;
 
-    constructor(string memory name,string memory symbol,string memory _collectionURI,address _owner,uint256 id) ERC721(name, symbol) {
+    constructor(
+        string memory name,
+        string memory symbol,
+        string memory _collectionURI,
+        address _owner,
+        uint256 id
+    ) ERC721(name, symbol) {
         owner = payable(_owner);
         collectionURI = _collectionURI;
         collectionId = id;
         // collectionPrice = _collectionPrice;
     }
-
 
     // function updateListPrice(uint256 _listPrice) public payable {
     //     require(owner == msg.sender, "Only owner can update listing price");
@@ -103,7 +108,7 @@ contract NFTCollection is ERC721URIStorage {
             true
         );
 
-        _transfer(msg.sender, address(this), tokenId);
+        // _transfer(msg.sender, address(this), tokenId);
 
         emit TokenListedSuccess(
             tokenId,
@@ -129,13 +134,13 @@ contract NFTCollection is ERC721URIStorage {
 
         return tokens;
     }
-    
-    function calculateTotalPrice() public view returns(uint256) {
+
+    function calculateTotalPrice() public view returns (uint256) {
         uint256 currentTokenId = _tokenIds.current();
         uint256 totalPrice = 0;
-        for(uint256 i=1;i<=currentTokenId;i++){
-           uint256 price = idToListedNft[i].price;
-           totalPrice+=price;
+        for (uint256 i = 1; i <= currentTokenId; i++) {
+            uint256 price = idToListedNft[i].price;
+            totalPrice += price;
         }
         return totalPrice;
     }
@@ -143,19 +148,16 @@ contract NFTCollection is ERC721URIStorage {
     function sellTheCollection() public payable {
         uint256 totalPrice = calculateTotalPrice();
         uint256 currentTokenId = _tokenIds.current();
-        require(msg.value == totalPrice,"totalPrice is not correct");
-        for(uint256 i=1;i<=currentTokenId;i++){
+        require(msg.value == totalPrice, "totalPrice is not correct");
+        for (uint256 i = 1; i <= currentTokenId; i++) {
+            address seller = idToListedNft[i].seller;
+            _transfer(seller, msg.sender, i);
             idToListedNft[i].seller = payable(msg.sender);
-            _transfer(address(this), msg.sender, i);
             approve(address(this), i);
-
         }
         payable(owner).transfer(msg.value);
         owner = payable(msg.sender);
     }
-
-
-
 
     function executeSale(uint256 tokenId) public payable {
         uint256 price = idToListedNft[tokenId].price;
@@ -170,15 +172,12 @@ contract NFTCollection is ERC721URIStorage {
         idToListedNft[tokenId].seller = payable(msg.sender);
         _itemsSold.increment();
 
-        _transfer(address(this), msg.sender, tokenId);
+        _transfer(seller, msg.sender, tokenId);
 
         approve(address(this), tokenId);
 
-        payable(owner).transfer(listingPrice);
+        // payable(owner).transfer(listingPrice);
 
         payable(seller).transfer(msg.value);
     }
 }
-
-
-
