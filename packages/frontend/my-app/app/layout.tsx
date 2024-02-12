@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="background">
           <ConnectProvider>
-            <Header />
+            <Header/>
             {children}
           </ConnectProvider>
         </div>
