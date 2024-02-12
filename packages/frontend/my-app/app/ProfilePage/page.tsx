@@ -13,12 +13,14 @@ import dynamic from "next/dynamic";
 import collectionFactoryABI from "../abis/collectionFactoryABI.json";
 import collectionABI from "../abis/collectionABI.json";
 import NFTCollectionCard from "../components/NFTCollectionCard";
+import CollectionNftCard from "../components/CollectionNftCard";
 const ProfilePage = () => {
  
   const [nftData, updateData] = useState([]);
   const [collectionNftData, updateCollectionNftData] = useState([]);
   const [collectionData, updateCollectionData] = useState([]);
   const [collectionArray, updateCollectionArray] = useState([]);
+  const [collectionNFTArray, updateCollectionNFTArray] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
   const [collectionDataFetched, collectionUpdateFetched] = useState(false);
   
@@ -30,12 +32,22 @@ const ProfilePage = () => {
       if (!dataFetched && !collectionDataFetched) {
         await getNFTData();
         await getCollectionData();
+        await getCollectionNFTData();
       }
     };
 
     fetchData();
   }, [])
-   
+  
+  async function collectionNftArrayPush(i) {
+    let collectionNFT = await readContract({
+      address: collectionArray[i],
+      abi: collectionABI,
+      functionName: "getAllNFTs",
+    });
+    collectionNFTArray.push(collectionNFT.filter((i) => i.seller == account.address))
+  }
+
   async function getCollectionNFTData() {
     let sumPrice = 0;
 
@@ -54,43 +66,60 @@ const ProfilePage = () => {
         functionName: "listOfNFTCollectionContracts",
         args: [i],
       });
-      collectionArray.push(...collectionArray, collectionAddress);
-      console.log(collectionArray);
+      collectionArray.push( collectionAddress);
+      
+      await collectionNftArrayPush(i);
+       
+      
+          
+      console.log(collectionNFTArray);  
+      
     }
+    // console.log(collectionArray);
     
-    // transaction = transaction.filter((i) => i.seller == account.address);
-
-    const items = await Promise.all(
-      collectionArray.map(async (i) => {
-        const tokenURI = await readContract({
-          address: marketPlaceAddress,
-          abi: nftMarketPlaceABI,
-          functionName: "tokenURI",
-          args: [i.tokenId],
-        });
-
-        let meta = await axios.get(tokenURI as string);
-        meta = meta.data;
-
-        let price = formatEther(i.price.toString());
-        let item = {
-          price,
-          tokenId: i.tokenId,
-          seller: i.seller,
-          owner: i.owner,
-          image: meta.image, 
-          name: meta.name,
-          description: meta.description,
-        };
-        
-        return item;
-      })
-    );
-    updateCollectionNftData(items);
+    // updateCollectionNFTArray(collectionNFTArray.filter((i) => i.seller == account.address));
+    // console.log(collectionNFTArray)
+    
+    
+      
+      
+     const items = await Promise.all(
+        (collectionNFTArray.flat().map(async (i) => {
+          const tokenURI = await readContract({
+            address: i.owner,
+            abi: collectionABI,
+            functionName: "tokenURI",
+            args: [i.tokenId],
+          });
+          
+          let meta = await axios.get(tokenURI as string);
+          meta = meta.data;
+          
+          let price = formatEther(i.price.toString());
+          let item = {
+            price,
+            
+            tokenId: i.tokenId,
+            seller: i.seller,
+            owner: i.owner,
+            image: meta.image, 
+            name: meta.name,
+            description: meta.description,
+          };
+          
+          return item;
+        })
+        )
+      );
+      updateCollectionNftData(items);
+    
     updateFetched(true);
-
+    
     
   }
+  console.log(collectionNftData);
+  // console.log(collectionNftData)
+
 
   async function getNFTData() {
     let sumPrice = 0;
@@ -155,10 +184,10 @@ const ProfilePage = () => {
       account: account.address,
     });
     
-    console.log(data[0]);
     
     
-    const items = await Promise.all(
+    
+    let items = await Promise.all(
       data.slice(0,Number(numberOfCollections)).map(async (i) => {
         const tokenURI = await readContract({
           address: i,
@@ -180,8 +209,8 @@ const ProfilePage = () => {
         
         return item;
       }) 
-    );
-    updateCollectionData(items);
+      );
+      updateCollectionData(items);
     collectionUpdateFetched(true);
 
     
@@ -234,6 +263,20 @@ const ProfilePage = () => {
             {nftData.length > 0 ? (
               nftData.map((value, index) => (
                 <NFTCard data={value} key={index} className="hover:shadow-lg" />
+              ))
+            ) : (
+              <div className="flex items-center justify-center h-48 bg-gray-200 rounded-lg">
+                <p className="text-xl">Loading your NFTs...</p>
+              </div>
+            )}
+          </div>
+          <h2 className="text-2xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-800 to-yellow-400 bg-clip-text text-transparent">
+            Your Collection NFTs
+          </h2>
+          <div className="flex mt-5 flex-wrap max-w-screen-xl text-center">
+            {collectionNftData.length > 0 ? (
+              collectionNftData.map((value, index) => (
+                <CollectionNftCard data={value} key={index} className="hover:shadow-lg" />
               ))
             ) : (
               <div className="flex items-center justify-center h-48 bg-gray-200 rounded-lg">

@@ -6,7 +6,7 @@ import { useState } from "react";
 const NFTCollectionCard = ({ data }: any) => {
   // console.log(data);
   const tO = {
-    pathname: "/CollectionsInfoPage/" + data.collectionAddress+"/"+data.tokenId,
+    pathname: "/CollectionsInfoPage/" + data.owner+"/"+data.tokenId,
   };
   const IPFSUrl = GetIpfsUrlFromPinata(data.image);
   return (
