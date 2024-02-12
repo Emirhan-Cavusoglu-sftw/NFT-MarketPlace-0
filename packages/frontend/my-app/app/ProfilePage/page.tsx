@@ -15,7 +15,8 @@ import collectionABI from "../abis/collectionABI.json";
 import NFTCollectionCard from "../components/NFTCollectionCard";
 const ProfilePage = () => {
  
-  const [dataa, updateData] = useState([]);
+  const [nftData, updateData] = useState([]);
+  const [collectionNftData, updateCollectionNftData] = useState([]);
   const [collectionData, updateCollectionData] = useState([]);
   const [collectionArray, updateCollectionArray] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
@@ -24,14 +25,72 @@ const ProfilePage = () => {
   const [totalPrice, updateTotalPrice] = useState("0");
   const account = useAccount();
 
-  // const { data, isError, isLoading } = useContractRead({
-  //   address: collectionFactoryAddress,
-  //   abi: collectionFactoryABI,
-  //   functionName: 'getUserCollection',
-  //   account: account.address,
-  // })
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!dataFetched && !collectionDataFetched) {
+        await getNFTData();
+        await getCollectionData();
+      }
+    };
 
+    fetchData();
+  }, [])
    
+  async function getCollectionNFTData() {
+    let sumPrice = 0;
+
+    let numberOfCollections = await readContract({
+      address: collectionFactoryAddress,
+      abi: collectionFactoryABI,
+      functionName: "numberOfCreatedCollection",
+      
+    });
+
+    for(let i = 0; i < Number(numberOfCollections); i++){
+
+      let collectionAddress = await readContract({
+        address: collectionFactoryAddress,
+        abi: collectionFactoryABI,
+        functionName: "listOfNFTCollectionContracts",
+        args: [i],
+      });
+      collectionArray.push(...collectionArray, collectionAddress);
+      console.log(collectionArray);
+    }
+    
+    // transaction = transaction.filter((i) => i.seller == account.address);
+
+    const items = await Promise.all(
+      collectionArray.map(async (i) => {
+        const tokenURI = await readContract({
+          address: marketPlaceAddress,
+          abi: nftMarketPlaceABI,
+          functionName: "tokenURI",
+          args: [i.tokenId],
+        });
+
+        let meta = await axios.get(tokenURI as string);
+        meta = meta.data;
+
+        let price = formatEther(i.price.toString());
+        let item = {
+          price,
+          tokenId: i.tokenId,
+          seller: i.seller,
+          owner: i.owner,
+          image: meta.image, 
+          name: meta.name,
+          description: meta.description,
+        };
+        
+        return item;
+      })
+    );
+    updateCollectionNftData(items);
+    updateFetched(true);
+
+    
+  }
 
   async function getNFTData() {
     let sumPrice = 0;
@@ -70,7 +129,7 @@ const ProfilePage = () => {
         return item;
       })
     );
-    updateData(items.slice(2));
+    updateData(items);
     updateFetched(true);
 
     updateTotalPrice(sumPrice.toPrecision(3));
@@ -130,16 +189,7 @@ const ProfilePage = () => {
 
   
   
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!dataFetched && !collectionDataFetched) {
-        await getNFTData();
-        await getCollectionData();
-      }
-    };
-
-    fetchData();
-  }, [])
+  
   
   
   
@@ -165,7 +215,7 @@ const ProfilePage = () => {
                   No. of NFTs =
                 </h2>
                 <p className="text-2xl text-white mb-3 ml-4 mr-10">
-                  {dataa.length}
+                  {nftData.length}
                 </p>
               </div>
               <div className="mt-3 md:mt-0 ml-4">
@@ -181,8 +231,8 @@ const ProfilePage = () => {
             Your NFTs
           </h2>
           <div className="flex mt-5 flex-wrap max-w-screen-xl text-center">
-            {dataa.length > 0 ? (
-              dataa.map((value, index) => (
+            {nftData.length > 0 ? (
+              nftData.map((value, index) => (
                 <NFTCard data={value} key={index} className="hover:shadow-lg" />
               ))
             ) : (
@@ -206,7 +256,7 @@ const ProfilePage = () => {
             )}
           </div>
 
-          {dataa.length === 0 && (
+          {nftData.length === 0 && (
             <p className="text-center mt-8 text-lg text-gray-500">
               No NFTs found in your collection. Connect your wallet or start
               exploring NFTs to add them here!
