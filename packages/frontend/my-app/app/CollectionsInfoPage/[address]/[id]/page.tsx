@@ -52,7 +52,7 @@ const NftInfoPage = () => {
     });
     const listedNft = await readContract({
       address: contractAddress,
-      abi: nftMarketPlaceABI,
+      abi: collectionABI,
       functionName: "getListedNftForId",
       args: [tokenId],
     });
