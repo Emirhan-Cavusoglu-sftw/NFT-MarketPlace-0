@@ -99,8 +99,9 @@ const NftInfoPage = () => {
     data.image = GetIpfsUrlFromPinata(data.image);
 
     return (
-      <div className="flex items-center justify-center mt-10">
-        
+      <div className="flex items-center justify-center mt-10 flex-col" >
+        <Link href={"/CollectionsInfoPage/"+contractAddress} className="text-white font-bold  mb-9">Return To Collection</Link>
+        <>
         <div className="bg-gradient-to-r from-yellow-800 to-yellow-400  rounded-lg shadow-lg overflow-hidden">
           <img src={data.image} alt="" className="w-full h-64 object-cover" />
           <div className="px-6 py-4">
@@ -125,6 +126,7 @@ const NftInfoPage = () => {
             )}
           </div>
         </div>
+        </>
       </div>
     );
     
