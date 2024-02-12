@@ -84,6 +84,7 @@ const ProfilePage = () => {
       abi: collectionFactoryABI,
       functionName: "numberOfCreatedCollectionPerUser",
       args: [account.address],
+      account: account.address,
     });
 
     
@@ -119,7 +120,7 @@ const ProfilePage = () => {
         };
         
         return item;
-      })
+      }) 
     );
     updateCollectionData(items);
     collectionUpdateFetched(true);

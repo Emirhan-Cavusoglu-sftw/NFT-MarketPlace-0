@@ -19,6 +19,7 @@ export default function Home() {
       address: marketPlaceAddress,
       abi: nftMarketPlaceABI,
       functionName: "getAllNFTs",
+      
     });
 
     const items = await Promise.all(

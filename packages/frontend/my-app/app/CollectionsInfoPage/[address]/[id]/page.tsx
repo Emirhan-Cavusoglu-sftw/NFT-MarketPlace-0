@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GetIpfsUrlFromPinata } from "../../../utils/util";
 import { marketPlaceAddress } from "../../../utils/constants";
 import axios from "axios";
@@ -10,15 +10,31 @@ import collectionABI from "../../../abis/collectionABI.json";
 import { readContract, writeContract } from "wagmi/actions";
 import { useAccount } from "wagmi";
 import { formatEther, parseEther } from "viem";
+import Link from "next/link";
 const NftInfoPage = () => {
   const contractAddress = useParams().address
   const tokenId = useParams().id
-  
   const account = useAccount();
   const [data, updateData] = useState({});
   const [dataFetched, updateDataFetched] = useState(false);
   const [message, updateMessage] = useState("");
-  const [currAddress, updateCurrAddress] = useState("0x");
+  
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!dataFetched ) {
+          await getNFTData(tokenId);
+        
+      }
+    };
+
+    fetchData();
+  }, [])
+
+
+
+
+
   async function buyNFT(tokenId) {
     try {
       
@@ -27,8 +43,8 @@ const NftInfoPage = () => {
       updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
       
       await writeContract({
-        address: marketPlaceAddress,
-        abi: nftMarketPlaceABI,
+        address: contractAddress,
+        abi: collectionABI,
         functionName: "executeSale",
         args: [tokenId],
         value: salePrice,
@@ -77,13 +93,14 @@ const NftInfoPage = () => {
   
   
 
-  if (!dataFetched) getNFTData(tokenId);
+  
   
   if (typeof data.image == "string")
     data.image = GetIpfsUrlFromPinata(data.image);
 
     return (
       <div className="flex items-center justify-center mt-10">
+        
         <div className="bg-gradient-to-r from-yellow-800 to-yellow-400  rounded-lg shadow-lg overflow-hidden">
           <img src={data.image} alt="" className="w-full h-64 object-cover" />
           <div className="px-6 py-4">
@@ -96,7 +113,7 @@ const NftInfoPage = () => {
             <div className="text-white">Seller: <span className="font-semibold">{data.seller}</span></div>
           </div>
           <div className="px-6 py-4 flex justify-center items-center">
-            {currAddress !== data.owner && currAddress !== data.seller ? (
+            {account.address !== data.owner && account.address !== data.seller ? (
               <button
                 className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
                 onClick={() => buyNFT(tokenId)}
