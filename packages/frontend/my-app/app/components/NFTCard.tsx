@@ -14,7 +14,7 @@ const NFTCard = ({ data }: any) => {
         <img
           src={IPFSUrl}
           alt=""
-          className="w-44 h-44 rounded-lg object-cover"
+          className="w-full h-44 rounded-lg object-cover"
         />
         <div className="text-white w-full p-2 bg-gradient-to-t from-[#454545] to-transparent rounded-lg pt-5 -mt-[108px] ">
           <div className="overflow-hidden whitespace-nowrap text-overflow-ellipsis max-w-[15ch]">

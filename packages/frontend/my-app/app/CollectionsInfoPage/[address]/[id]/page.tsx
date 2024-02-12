@@ -11,6 +11,7 @@ import { readContract, writeContract } from "wagmi/actions";
 import { useAccount } from "wagmi";
 import { formatEther, parseEther } from "viem";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 const NftInfoPage = () => {
   const contractAddress = useParams().address
   const tokenId = useParams().id
@@ -99,9 +100,15 @@ const NftInfoPage = () => {
     data.image = GetIpfsUrlFromPinata(data.image);
 
     return (
+      
       <div className="flex items-center justify-center mt-10 flex-col" >
-        <Link href={"/CollectionsInfoPage/"+contractAddress} className="text-white font-bold  mb-9">Return To Collection</Link>
-        <>
+    <>
+    <button className="text-white font-bold  mb-9">
+
+    <Link href={"/CollectionsInfoPage/"+contractAddress} >Return To Collection</Link>
+    </button>
+            
+        
         <div className="bg-gradient-to-r from-yellow-800 to-yellow-400  rounded-lg shadow-lg overflow-hidden">
           <img src={data.image} alt="" className="w-full h-64 object-cover" />
           <div className="px-6 py-4">
@@ -128,8 +135,11 @@ const NftInfoPage = () => {
         </div>
         </>
       </div>
+      
     );
     
 };
 
-export default NftInfoPage;
+export default dynamic(() => Promise.resolve(NftInfoPage), {
+    ssr: false,
+  });
