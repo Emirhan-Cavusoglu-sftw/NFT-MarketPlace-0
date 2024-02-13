@@ -114,7 +114,7 @@ const NFTCollectionPage = () => {
   async function buyNFTCollection(contractAddress) {
     try {
       const price = parseEther(formatEther(totalPrice))
-      updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
+      // updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
      const {hash} = await writeContract({
         address: contractAddress,
         abi: collectionABI,
@@ -132,8 +132,8 @@ const NFTCollectionPage = () => {
         args: [id],
       });
       
-      alert("You successfully bought the NFT Collection!");
-      updateMessage("");
+      // alert("You successfully bought the NFT Collection!");
+      // updateMessage("");
     } catch (e) {
       alert("Upload Error" + e);
     }
