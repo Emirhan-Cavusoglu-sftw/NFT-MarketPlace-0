@@ -25,6 +25,7 @@ const NFTCollectionPage = () => {
     price: "",
   });
   const [infoPopup, setInfoPopup] = useState(false);
+  const [finalInfoPopup, setFinalInfoPopup] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [nftsData, updateNFTsData] = useState([]);
   const [dataFetched, updateDataFetched] = useState(false);
@@ -108,7 +109,6 @@ const NFTCollectionPage = () => {
     updateNftDataFetched(true);
   }
 
-
   async function buyNFTCollection(contractAddress) {
     try {
       const price = parseEther(formatEther(totalPrice));
@@ -131,7 +131,7 @@ const NFTCollectionPage = () => {
         args: [id],
       });
       setInfoPopup(false);
-
+      setFinalInfoPopup(true);
     } catch (e) {
       alert("Upload Error" + e);
     }
@@ -277,16 +277,10 @@ const NFTCollectionPage = () => {
               <button
                 className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
                 onClick={() => buyNFTCollection(contractAddress)}
-              > 
+              >
                 Buy this Collection
-                {infoPopup && (
-                  <div className="absolute bg-gradient-to-r from-yellow-800 to-yellow-400 p-2 rounded-lg shadow-lg">
-                    <p className="text-white">Buying the NFT... Please Wait (Upto 5 mins)</p>
-                  </div>
-                )}
               </button>
-            )
-            : (
+            ) : (
               <div className="text-green-600 font-semibold">
                 You are the owner of this NFT
               </div>
@@ -294,6 +288,27 @@ const NFTCollectionPage = () => {
           </div>
         </div>
       </div>
+
+      {infoPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-red-800 p-2 rounded-lg shadow-lg h-50 w-50">
+          <p className="text-white">
+            Buying the NFT... Please Wait (Upto 5 mins)
+          </p>
+        </div>
+      )}
+            {finalInfoPopup && (
+        <div className="fixed inset-0 flex flex-col items-center justify-center bg-green-700 p-2 rounded-lg shadow-lg h-50 w-50">
+          <p className="text-black">
+            Your NFT collection has been bought successfully!
+          </p>
+          <button
+          className=""
+          onClick={() => setFinalInfoPopup(false)}
+          > ✕ </button>
+        </div>
+      )}
+
+
       <>
         <>
           {showPopup && (
