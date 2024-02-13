@@ -303,7 +303,7 @@ const NFTCollectionPage = () => {
           </p>
           <button
           className=""
-          onClick={() => setFinalInfoPopup(false)}
+          onClick={() => window.location.reload()}
           > ✕ </button>
         </div>
       )}
