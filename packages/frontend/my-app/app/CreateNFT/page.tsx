@@ -8,7 +8,6 @@ import { writeContract } from "wagmi/actions";
 import nftMarketPlaceABI from "../abis/nftMarketPlaceABI.json";
 import { parseEther, formatEther } from "viem";
 const Page = () => {
-  
   const [formParams, updateFormParams] = useState({
     name: "",
     description: "",

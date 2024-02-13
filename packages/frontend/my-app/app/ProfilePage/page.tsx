@@ -3,7 +3,10 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import NFTCard from "../components/NFTCard";
-import { marketPlaceAddress ,collectionFactoryAddress} from "../utils/constants";
+import {
+  marketPlaceAddress,
+  collectionFactoryAddress,
+} from "../utils/constants";
 import nftMarketPlaceABI from "../abis/nftMarketPlaceABI.json";
 import { useContractRead, useContractWrite, useAccount } from "wagmi";
 import { readContract } from "wagmi/actions";
@@ -15,7 +18,6 @@ import collectionABI from "../abis/collectionABI.json";
 import NFTCollectionCard from "../components/NFTCollectionCard";
 import CollectionNftCard from "../components/CollectionNftCard";
 const ProfilePage = () => {
- 
   const [nftData, updateData] = useState([]);
   const [collectionNftData, updateCollectionNftData] = useState([]);
   const [collectionData, updateCollectionData] = useState([]);
@@ -23,7 +25,7 @@ const ProfilePage = () => {
   const [collectionNFTArray, updateCollectionNFTArray] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
   const [collectionDataFetched, collectionUpdateFetched] = useState(false);
-  
+
   const [totalPrice, updateTotalPrice] = useState("0");
   const account = useAccount();
 
@@ -37,15 +39,17 @@ const ProfilePage = () => {
     };
 
     fetchData();
-  }, [])
-  
+  }, []);
+
   async function collectionNftArrayPush(i) {
     let collectionNFT = await readContract({
       address: collectionArray[i],
       abi: collectionABI,
       functionName: "getAllNFTs",
     });
-    collectionNFTArray.push(collectionNFT.filter((i) => i.seller == account.address))
+    collectionNFTArray.push(
+      collectionNFT.filter((i) => i.seller == account.address)
+    );
   }
 
   async function getCollectionNFTData() {
@@ -55,71 +59,59 @@ const ProfilePage = () => {
       address: collectionFactoryAddress,
       abi: collectionFactoryABI,
       functionName: "numberOfCreatedCollection",
-      
     });
 
-    for(let i = 0; i < Number(numberOfCollections); i++){
-
+    for (let i = 0; i < Number(numberOfCollections); i++) {
       let collectionAddress = await readContract({
         address: collectionFactoryAddress,
         abi: collectionFactoryABI,
         functionName: "listOfNFTCollectionContracts",
         args: [i],
       });
-      collectionArray.push( collectionAddress);
-      
+      collectionArray.push(collectionAddress);
+
       await collectionNftArrayPush(i);
-       
-      
-          
-      console.log(collectionNFTArray);  
-      
+
+      console.log(collectionNFTArray);
     }
     // console.log(collectionArray);
-    
+
     // updateCollectionNFTArray(collectionNFTArray.filter((i) => i.seller == account.address));
     // console.log(collectionNFTArray)
-    
-    
-      
-      
-     const items = await Promise.all(
-        (collectionNFTArray.flat().map(async (i) => {
-          const tokenURI = await readContract({
-            address: i.owner,
-            abi: collectionABI,
-            functionName: "tokenURI",
-            args: [i.tokenId],
-          });
-          
-          let meta = await axios.get(tokenURI as string);
-          meta = meta.data;
-          
-          let price = formatEther(i.price.toString());
-          let item = {
-            price,
-            
-            tokenId: i.tokenId,
-            seller: i.seller,
-            owner: i.owner,
-            image: meta.image, 
-            name: meta.name,
-            description: meta.description,
-          };
-          
-          return item;
-        })
-        )
-      );
-      updateCollectionNftData(items);
-    
+
+    const items = await Promise.all(
+      collectionNFTArray.flat().map(async (i) => {
+        const tokenURI = await readContract({
+          address: i.owner,
+          abi: collectionABI,
+          functionName: "tokenURI",
+          args: [i.tokenId],
+        });
+
+        let meta = await axios.get(tokenURI as string);
+        meta = meta.data;
+
+        let price = formatEther(i.price.toString());
+        let item = {
+          price,
+
+          tokenId: i.tokenId,
+          seller: i.seller,
+          owner: i.owner,
+          image: meta.image,
+          name: meta.name,
+          description: meta.description,
+        };
+
+        return item;
+      })
+    );
+    updateCollectionNftData(items);
+
     updateFetched(true);
-    
-    
   }
   console.log(collectionNftData);
   // console.log(collectionNftData)
-
 
   async function getNFTData() {
     let sumPrice = 0;
@@ -150,7 +142,7 @@ const ProfilePage = () => {
           tokenId: i.tokenId,
           seller: i.seller,
           owner: i.owner,
-          image: meta.image, 
+          image: meta.image,
           name: meta.name,
           description: meta.description,
         };
@@ -163,10 +155,8 @@ const ProfilePage = () => {
 
     updateTotalPrice(sumPrice.toPrecision(3));
   }
-  
+
   async function getCollectionData() {
-    
-    
     const numberOfCollections = await readContract({
       address: collectionFactoryAddress,
       abi: collectionFactoryABI,
@@ -175,53 +165,37 @@ const ProfilePage = () => {
       account: account.address,
     });
 
-    
-
     const data = await readContract({
       address: collectionFactoryAddress,
       abi: collectionFactoryABI,
       functionName: "getUserCollection",
       account: account.address,
     });
-    
-    
-    
-    
+
     let items = await Promise.all(
-      data.slice(0,Number(numberOfCollections)).map(async (i) => {
+      data.slice(0, Number(numberOfCollections)).map(async (i) => {
         const tokenURI = await readContract({
           address: i,
           abi: collectionABI,
           functionName: "collectionURI",
-          
         });
 
         let meta = await axios.get(tokenURI as string);
         meta = meta.data;
 
-        
         let item = {
           address: i,
           image: meta.image, // Access the 'data' property of the 'meta' object to get the image property
           name: meta.name,
           description: meta.description,
         };
-        
+
         return item;
-      }) 
-      );
-      updateCollectionData(items);
+      })
+    );
+    updateCollectionData(items);
     collectionUpdateFetched(true);
-
-    
   }
-
-  
-  
-  
-  
-  
-  
 
   return (
     <>
@@ -276,7 +250,11 @@ const ProfilePage = () => {
           <div className="flex mt-5 flex-wrap max-w-screen-xl text-center">
             {collectionNftData.length > 0 ? (
               collectionNftData.map((value, index) => (
-                <CollectionNftCard data={value} key={index} className="hover:shadow-lg" />
+                <CollectionNftCard
+                  data={value}
+                  key={index}
+                  className="hover:shadow-lg"
+                />
               ))
             ) : (
               <div className="flex items-center justify-center h-48 bg-gray-200 rounded-lg">
@@ -290,7 +268,11 @@ const ProfilePage = () => {
           <div className="flex mt-5 flex-wrap max-w-screen-xl text-center">
             {collectionData.length > 0 ? (
               collectionData.map((value, index) => (
-                <NFTCollectionCard data={value} key={index} className="hover:shadow-lg" />
+                <NFTCollectionCard
+                  data={value}
+                  key={index}
+                  className="hover:shadow-lg"
+                />
               ))
             ) : (
               <div className="flex items-center justify-center h-48 bg-gray-200 rounded-lg">

@@ -296,18 +296,17 @@ const NFTCollectionPage = () => {
           </p>
         </div>
       )}
-            {finalInfoPopup && (
+      {finalInfoPopup && (
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-green-700 p-2 rounded-lg shadow-lg h-50 w-50">
           <p className="text-black">
             Your NFT collection has been bought successfully!
           </p>
-          <button
-          className=""
-          onClick={() => window.location.reload()}
-          > ✕ </button>
+          <button className="" onClick={() => window.location.reload()}>
+            {" "}
+            ✕{" "}
+          </button>
         </div>
       )}
-
 
       <>
         <>
@@ -420,11 +419,11 @@ const NFTCollectionPage = () => {
             </button>
           </div>
         </>
-        <div>
-          <h2 className="text-2xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-800 to-yellow-400 bg-clip-text text-transparent mt-10">
+        <div className="flex flex-col items-center justify-center text-center">
+          <h2 className="text-2xl font-bold mb-8  bg-gradient-to-r from-yellow-800 to-yellow-400 bg-clip-text text-transparent mt-10">
             Your NFTs
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 items-center justify-center md:grid-cols-2 lg:grid-cols-3 gap-4">
             {nftsData.length > 0 ? (
               nftsData.map((value, index) => (
                 <CollectionNftCard
@@ -434,7 +433,7 @@ const NFTCollectionPage = () => {
                 />
               ))
             ) : (
-              <div className="flex items-center justify-center h-48 bg-gray-200 rounded-lg">
+              <div className="flex flex-col items-center justify-center h-48 bg-gray-200 rounded-lg">
                 <p className="text-xl">Loading your NFTs...</p>
               </div>
             )}

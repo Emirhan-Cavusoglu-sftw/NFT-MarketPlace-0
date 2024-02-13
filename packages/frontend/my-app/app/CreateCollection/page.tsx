@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../utils/pinata";
-import { collectionFactoryAddress} from "../utils/constants";
+import { collectionFactoryAddress } from "../utils/constants";
 import { useState } from "react";
 import { useContractRead, useContractWrite, useAccount } from "wagmi";
 import { writeContract } from "wagmi/actions";
@@ -12,25 +12,19 @@ const Page = () => {
   const contractAddress = "0xbB6EB8CfA4790Aeb1AA6258c5A03DBD4f3Ac2386";
   const [formParams, updateFormParams] = useState({
     name: "",
-    symbol:"",
+    symbol: "",
     description: "",
-    
   });
   const [fileURL, setFileURL] = useState(null);
   const [message, updateMessage] = useState("");
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [enableButton, setEnableButton] = useState(false);
   const account = useAccount();
-  
-
-  
-  
 
   async function OnChangeFile(e: any) {
     var file = e.target.files[0];
-    
+
     try {
-      
       updateMessage("Uploading image to IPFS.. please wait!");
       const response = await uploadFileToIPFS(file);
       if (response.success === true) {
@@ -47,9 +41,9 @@ const Page = () => {
     }
   }
   async function uploadMetadataToIPFS() {
-    const { name, symbol,description } = formParams;
+    const { name, symbol, description } = formParams;
     //Make sure that none of the fields are empty
-    if (!name || !symbol ||!description ||  !isFileUploaded) {
+    if (!name || !symbol || !description || !isFileUploaded) {
       updateMessage("Please fill all the fields!");
       return -1;
     }
@@ -58,7 +52,7 @@ const Page = () => {
       name,
       symbol,
       description,
-      
+
       image: fileURL,
     };
 
@@ -85,19 +79,15 @@ const Page = () => {
         "Uploading NFT(takes 5 mins).. please dont click anything!"
       );
 
-      
       const symbol = formParams.symbol;
       const name = formParams.name;
-      
 
       await writeContract({
         address: collectionFactoryAddress,
         abi: collectionFactoryABI,
         functionName: "createNFTCollectionContract",
-        args: [name,symbol,metadataURL,account.address ]
-        
+        args: [name, symbol, metadataURL, account.address],
       });
-      
 
       alert("Successfully listed your NFT!");
 
@@ -163,7 +153,7 @@ const Page = () => {
             }
           />
         </div>
-       
+
         <div className="mb-6">
           <label
             className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"

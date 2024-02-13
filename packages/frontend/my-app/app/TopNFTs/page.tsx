@@ -12,14 +12,12 @@ import axios from "axios";
 export default function Home() {
   const [data, updateData] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
-  
 
   async function getNFTData() {
     let transaction = await readContract({
       address: marketPlaceAddress,
       abi: nftMarketPlaceABI,
       functionName: "getAllNFTs",
-      
     });
 
     const items = await Promise.all(
@@ -65,4 +63,3 @@ export default function Home() {
     </div>
   );
 }
-
