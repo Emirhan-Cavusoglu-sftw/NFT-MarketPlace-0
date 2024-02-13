@@ -10,7 +10,7 @@ import collectionFactoryABI from "../../abis/collectionFactoryABI.json";
 import collectionABI from "../../abis/collectionABI.json";
 import axios from "axios";
 import nftMarketPlaceABI from "../../abis/nftMarketPlaceABI.json";
-import { readContract, writeContract } from "wagmi/actions";
+import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
 import { useAccount, useContractRead } from "wagmi";
 import { formatEther, parseEther } from "viem";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "@/app/utils/pinata";
@@ -115,13 +115,15 @@ const NFTCollectionPage = () => {
     try {
       const price = parseEther(formatEther(totalPrice))
       updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
-      await writeContract({
+     const {hash} = await writeContract({
         address: contractAddress,
         abi: collectionABI,
         functionName: "sellTheCollection",
         account: account.address,
         value: price ,
       });
+      await waitForTransaction({hash,});
+      
       await writeContract({
         address: collectionFactoryAddress,
         abi: collectionFactoryABI,
