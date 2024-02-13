@@ -94,7 +94,7 @@ export default function Home() {
     <div className="flex flex-col place-items-center mt-20 pagebackground">
       
 
-      <Link href={"/TopCollections"}><div className="md:text-xl font-bold text-white">Top NFTs</div></Link>
+      <div className="md:text-xl font-bold text-white">Top Collections</div>
       <div className="flex mt-5 justify-between flex-wrap max-w-screen-xl text-center">
         {collectionData?.map((value, index) => {
           return <NFTCollectionCard data={value} key={index}></NFTCollectionCard>;

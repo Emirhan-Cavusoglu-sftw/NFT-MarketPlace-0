@@ -17,12 +17,15 @@ import { uploadFileToIPFS, uploadJSONToIPFS } from "@/app/utils/pinata";
 import NFTCard from "@/app/components/NFTCard";
 import dynamic from "next/dynamic";
 import CollectionNftCard from "@/app/components/CollectionNftCard";
+import { info } from "console";
 const NFTCollectionPage = () => {
   const [formParams, updateFormParams] = useState({
     name: "",
     description: "",
     price: "",
   });
+  const [infoPopup, setInfoPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [nftsData, updateNFTsData] = useState([]);
   const [dataFetched, updateDataFetched] = useState(false);
 
@@ -36,7 +39,6 @@ const NFTCollectionPage = () => {
   const [data, updateData] = useState({});
   const [nftdataFetched, updateNftDataFetched] = useState(false);
   const [message, updateMessage] = useState("");
-  
 
   const { data: listingPrice } = useContractRead({
     address: contractAddress,
@@ -57,19 +59,16 @@ const NFTCollectionPage = () => {
     functionName: "collectionId",
   });
 
-  
-  
   useEffect(() => {
     const fetchData = async () => {
       if (!dataFetched && !nftdataFetched) {
         await getNFTsData(contractAddress);
         await getNFTCollectionData(contractAddress);
-      }}
+      }
+    };
 
     fetchData();
   }, []);
-
-  
 
   async function getNFTsData(contractAddress) {
     let transaction = await readContract({
@@ -77,8 +76,6 @@ const NFTCollectionPage = () => {
       abi: collectionABI,
       functionName: "getAllNFTs",
     });
-
-   
 
     const items = await Promise.all(
       transaction.map(async (i) => {
@@ -95,7 +92,7 @@ const NFTCollectionPage = () => {
         let price = formatEther(i.price.toString());
         let item = {
           price,
-          collectionAddress:contractAddress,
+          collectionAddress: contractAddress,
           tokenId: i.tokenId,
           seller: i.seller,
           owner: i.owner,
@@ -110,20 +107,22 @@ const NFTCollectionPage = () => {
     updateNFTsData(items);
     updateNftDataFetched(true);
   }
-  
+
+
   async function buyNFTCollection(contractAddress) {
     try {
-      const price = parseEther(formatEther(totalPrice))
-      // updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
-     const {hash} = await writeContract({
+      const price = parseEther(formatEther(totalPrice));
+      setInfoPopup(true);
+
+      const { hash } = await writeContract({
         address: contractAddress,
         abi: collectionABI,
         functionName: "sellTheCollection",
         account: account.address,
-        value: price ,
+        value: price,
       });
-      await waitForTransaction({hash,});
-      
+      await waitForTransaction({ hash });
+
       await writeContract({
         address: collectionFactoryAddress,
         abi: collectionFactoryABI,
@@ -131,9 +130,8 @@ const NFTCollectionPage = () => {
         account: account.address,
         args: [id],
       });
-      
-      // alert("You successfully bought the NFT Collection!");
-      // updateMessage("");
+      setInfoPopup(false);
+
     } catch (e) {
       alert("Upload Error" + e);
     }
@@ -160,7 +158,7 @@ const NFTCollectionPage = () => {
 
     tokenURI = GetIpfsUrlFromPinata(tokenURI);
     let meta = await axios.get(tokenURI);
-    
+
     meta = meta.data;
 
     let item = {
@@ -170,7 +168,7 @@ const NFTCollectionPage = () => {
       name: meta.name,
       description: meta.description,
     };
-    
+
     updateData(item);
     updateDataFetched(true);
   }
@@ -263,14 +261,15 @@ const NFTCollectionPage = () => {
           </div>
           <div className="px-6 py-4">
             <div className="text-white">
-              Price: <span className="font-semibold">{totalPrice==undefined?0:formatEther(totalPrice)} 
-              
-              ETH</span>
+              Price:{" "}
+              <span className="font-semibold">
+                {totalPrice == undefined ? 0 : formatEther(totalPrice)}
+                ETH
+              </span>
             </div>
             <div className="text-white">
               Owner: <span className="font-semibold">{data.owner}</span>
             </div>
-            
           </div>
           <div className="px-6 py-4 flex justify-center items-center">
             {account.address !== data.owner &&
@@ -278,10 +277,16 @@ const NFTCollectionPage = () => {
               <button
                 className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
                 onClick={() => buyNFTCollection(contractAddress)}
-              >
+              > 
                 Buy this Collection
+                {infoPopup && (
+                  <div className="absolute bg-gradient-to-r from-yellow-800 to-yellow-400 p-2 rounded-lg shadow-lg">
+                    <p className="text-white">Buying the NFT... Please Wait (Upto 5 mins)</p>
+                  </div>
+                )}
               </button>
-            ) : (
+            )
+            : (
               <div className="text-green-600 font-semibold">
                 You are the owner of this NFT
               </div>
@@ -290,104 +295,128 @@ const NFTCollectionPage = () => {
         </div>
       </div>
       <>
-        <div className="flex flex-col items-center mt-10 ">
-          <form className="w-full max-w-lg bg-gradient-to-r from-yellow-800 to-yellow-400 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 ">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent mb-8 text-center">
-              Upload Your NFT to the Marketplace
-            </h2>
-            <div className="mb-6">
-              <label
-                className="block 
-            bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
-                htmlFor="name"
-              >
-                NFT Name
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="name"
-                type="text"
-                placeholder="Axie#4563"
-                onChange={(e) =>
-                  updateFormParams({ ...formParams, name: e.target.value })
-                }
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
-                htmlFor="description"
-              >
-                NFT Description
-              </label>
-              <textarea
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="description"
-                placeholder="Axie Infinity Collection"
-                onChange={(e) =>
-                  updateFormParams({
-                    ...formParams,
-                    description: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
-                htmlFor="price"
-              >
-                Price (in ETH)
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="number"
-                placeholder="Min 0.01 ETH"
-                step="0.01"
-                onChange={(e) =>
-                  updateFormParams({ ...formParams, price: e.target.value })
-                }
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
-                htmlFor="image"
-              >
-                Upload Image (&lt;1000 KB)
-              </label>
-              <div className="flex items-center justify-between bg-gray-100 border-2 border-gray-200 rounded-md py-2 px-4">
-                <input type={"file"} onChange={OnChangeFile} />
+        <>
+          {showPopup && (
+            <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+              <div className="bg-gradient-to-r from-yellow-800 to-yellow-400 p-8 rounded-lg shadow-lg">
+                <button
+                  className="flex ml-auto "
+                  onClick={() => setShowPopup(false)}
+                >
+                  ✕
+                </button>
+                <h2 className="text-xl font-bold mb-4">
+                  Upload Your NFT to the Marketplace
+                </h2>
+                <div className="mb-6">
+                  <label
+                    className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+                    htmlFor="name"
+                  >
+                    NFT Name
+                  </label>
+                  <input
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="name"
+                    type="text"
+                    placeholder="Axie#4563"
+                    onChange={(e) =>
+                      updateFormParams({ ...formParams, name: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="mb-6">
+                  <label
+                    className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+                    htmlFor="description"
+                  >
+                    NFT Description
+                  </label>
+                  <textarea
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="description"
+                    placeholder="Axie Infinity Collection"
+                    onChange={(e) =>
+                      updateFormParams({
+                        ...formParams,
+                        description: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="mb-6">
+                  <label
+                    className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+                    htmlFor="price"
+                  >
+                    Price (in ETH)
+                  </label>
+                  <input
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="number"
+                    placeholder="Min 0.01 ETH"
+                    step="0.01"
+                    onChange={(e) =>
+                      updateFormParams({ ...formParams, price: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="mb-6">
+                  <label
+                    className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+                    htmlFor="image"
+                  >
+                    Upload Image (&lt;1000 KB)
+                  </label>
+                  <div className="flex items-center justify-between bg-gray-100 border-2 border-gray-200 rounded-md py-2 px-4">
+                    <input type={"file"} onChange={OnChangeFile} />
+                  </div>
+                </div>
+                <div className="text-red-500 text-sm mb-4 text-center">
+                  {message}
+                </div>
+                {enableButton ? (
+                  <button
+                    className="w-full bg-gradient-to-r from-purple-900 to-violet-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    onClick={(e) => {
+                      addNftToCollection(e, contractAddress);
+                      setShowPopup(false);
+                    }}
+                  >
+                    Create NFT
+                  </button>
+                ) : (
+                  <button
+                    disabled
+                    className="w-full bg-gray-400 text-white font-bold py-2 px-4 rounded cursor-not-allowed"
+                  >
+                    Create NFT
+                  </button>
+                )}
               </div>
             </div>
-            <div className="text-red-500 text-sm mb-4 text-center">
-              {message}
-            </div>
-            {enableButton ? (
-              <button
-                className="w-full bg-purple-600 hover:bg-purple-700 bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                onClick={(e) => addNftToCollection(e, contractAddress)}
-              >
-                Create NFT
-              </button>
-            ) : (
-              <button
-                disabled
-                className="w-full bg-gray-400 text-white font-bold py-2 px-4 rounded cursor-not-allowed"
-              >
-                Create NFT
-              </button>
-            )}
-          </form>
-        </div>
+          )}
+          <div className="flex justify-center mt-4">
+            <button
+              className="bg-gradient-to-r from-purple-900 to-violet-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={() => setShowPopup(true)}
+            >
+              Add NFT to Collection
+            </button>
+          </div>
+        </>
         <div>
-          <h2 className="text-2xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-800 to-yellow-400 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-800 to-yellow-400 bg-clip-text text-transparent mt-10">
             Your NFTs
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {nftsData.length > 0 ? (
               nftsData.map((value, index) => (
-                <CollectionNftCard data={value} key={index} className="hover:shadow-lg" />
+                <CollectionNftCard
+                  data={value}
+                  key={index}
+                  className="hover:shadow-lg"
+                />
               ))
             ) : (
               <div className="flex items-center justify-center h-48 bg-gray-200 rounded-lg">
