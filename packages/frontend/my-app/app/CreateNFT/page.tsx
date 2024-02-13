@@ -181,7 +181,7 @@ const Page = () => {
         <div className="text-red-500 text-sm mb-4 text-center">{message}</div>
         {enableButton ? (
           <button
-            className="w-full bg-purple-600 hover:bg-purple-700 bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="w-full bg-gradient-to-r from-purple-900 to-violet-400  text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             onClick={createNFT}
           >
             Create NFT
