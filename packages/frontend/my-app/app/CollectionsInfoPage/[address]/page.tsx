@@ -18,6 +18,7 @@ import NFTCard from "@/app/components/NFTCard";
 import dynamic from "next/dynamic";
 import CollectionNftCard from "@/app/components/CollectionNftCard";
 import { info } from "console";
+import Offers from "@/app/components/Offers";
 const NFTCollectionPage = () => {
   const [formParams, updateFormParams] = useState({
     name: "",
@@ -418,6 +419,7 @@ const NFTCollectionPage = () => {
               Add NFT to Collection
             </button>
           </div>
+          <div className="mt-5"><Offers/></div>
         </>
         <div className="flex flex-col items-center justify-center text-center">
           <h2 className="text-2xl font-bold mb-8  bg-amber-400 bg-clip-text text-transparent mt-10">
