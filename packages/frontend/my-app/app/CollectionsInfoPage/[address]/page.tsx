@@ -30,6 +30,8 @@ const NFTCollectionPage = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [nftsData, updateNFTsData] = useState([]);
   const [dataFetched, updateDataFetched] = useState(false);
+  const [offerDataFetched, updateOfferDataFetched] = useState(false);
+  const [offerData, updateOfferData] = useState([]);
 
   const [fileURL, setFileURL] = useState(null);
 
@@ -63,14 +65,32 @@ const NFTCollectionPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!dataFetched && !nftdataFetched) {
+      if (!dataFetched && !nftdataFetched && !offerDataFetched) {
         await getNFTsData(contractAddress);
         await getNFTCollectionData(contractAddress);
+        await getOfferData(contractAddress);
       }
     };
 
     fetchData();
   }, []);
+  
+
+
+  async function getOfferData(contractAddress) {
+    let offers = await readContract({
+      address: contractAddress,
+      abi: collectionABI,
+      functionName: "offers",
+      
+    });
+    console.log(offers);
+    updateDataFetched(true);
+  }
+
+
+
+
 
   async function getNFTsData(contractAddress) {
     let transaction = await readContract({
