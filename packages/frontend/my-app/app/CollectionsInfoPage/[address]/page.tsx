@@ -261,7 +261,7 @@ const NFTCollectionPage = () => {
           </div>
           <div className="px-6 py-4">
             <div className="text-white">
-              Price:{" "}
+              Total Volume:{" "}
               <span className="font-semibold">
                 {totalPrice == undefined ? 0 : formatEther(totalPrice)}
                 ETH

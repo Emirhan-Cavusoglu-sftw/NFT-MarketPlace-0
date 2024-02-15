@@ -13,6 +13,7 @@ const Page = () => {
   const [formParams, updateFormParams] = useState({
     name: "",
     symbol: "",
+    price: "",
     description: "",
   });
   const [fileURL, setFileURL] = useState(null);
@@ -41,9 +42,9 @@ const Page = () => {
     }
   }
   async function uploadMetadataToIPFS() {
-    const { name, symbol, description } = formParams;
+    const { name, symbol, price,description } = formParams;
     //Make sure that none of the fields are empty
-    if (!name || !symbol || !description || !isFileUploaded) {
+    if (!name || !symbol || !price || !description || !isFileUploaded) {
       updateMessage("Please fill all the fields!");
       return -1;
     }
@@ -51,6 +52,7 @@ const Page = () => {
     const nftJSON = {
       name,
       symbol,
+      price,
       description,
 
       image: fileURL,
@@ -81,12 +83,13 @@ const Page = () => {
 
       const symbol = formParams.symbol;
       const name = formParams.name;
+      const price = formParams.price;
 
       await writeContract({
         address: collectionFactoryAddress,
         abi: collectionFactoryABI,
         functionName: "createNFTCollectionContract",
-        args: [name, symbol, metadataURL, account.address],
+        args: [name, symbol, metadataURL, price,account.address],
       });
 
       alert("Successfully listed your NFT!");
@@ -153,7 +156,23 @@ const Page = () => {
             }
           />
         </div>
-
+        <div className="mb-6">
+          <label
+            className="block  bg-clip-text text-white text-transparent text-sm  mb-2"
+            htmlFor="price"
+          >
+            Price (in ETH)
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="number"
+            placeholder="ETH"
+            step="0.01"
+            onChange={(e) =>
+              updateFormParams({ ...formParams, price: e.target.value })
+            }
+          />
+        </div>
         <div className="mb-6">
           <label
             className="block text-white bg-clip-text text-transparent text-sm  mb-2"
