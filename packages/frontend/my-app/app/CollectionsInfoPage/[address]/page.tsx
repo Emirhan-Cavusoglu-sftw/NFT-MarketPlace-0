@@ -107,13 +107,14 @@ const NFTCollectionPage = () => {
         address: offer[0],
         price: offer[1],
       }
-      offerArray.push(offerItem);
-      updateOfferData(offerArray);
-      console.log(offerArray);
+      
+      setOfferArray(offerArray => [...offerArray, offerItem]);
+      
       
     }
     
-
+    
+    console.log(offerArray);
     
     
     
@@ -201,7 +202,7 @@ const NFTCollectionPage = () => {
       alert("Upload Error" + e);
     }
   }
-
+ console.log(isOfferAccepted)
   async function getNFTCollectionData(contractAddress) {
     let tokenURI = await readContract({
       address: contractAddress,
@@ -502,11 +503,12 @@ const NFTCollectionPage = () => {
             </button>
           </div>
           <div className="mt-5 flex  ">
-            {offerData.length > 0  ? (
+            {offerArray.length > 0  ? (
               offerArray.map((value, index) => (
                 
                 <Offers
                   data={value}
+                  contractAddress={contractAddress}
                   key={index}
                   
                 />
@@ -534,6 +536,7 @@ const NFTCollectionPage = () => {
               nftsData.map((value, index) => (
                 <CollectionNftCard
                   data={value}
+                  
                   key={index}
                   className="hover:shadow-lg"
                 />
