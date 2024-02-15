@@ -25,7 +25,9 @@ const NFTCollectionPage = () => {
     description: "",
     price: "",
   });
+  const [isOfferAccepted, setIsOfferAccepted] = useState(false);  
   const [infoPopup, setInfoPopup] = useState(false);
+  const [offerArray, setOfferArray] = useState([]);
   const [finalInfoPopup, setFinalInfoPopup] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [nftsData, updateNFTsData] = useState([]);
@@ -78,14 +80,49 @@ const NFTCollectionPage = () => {
 
 
   async function getOfferData(contractAddress) {
-    let offers = await readContract({
+    let isOfferAccepted = await readContract({
       address: contractAddress,
       abi: collectionABI,
-      functionName: "offers",
-      
+      functionName: "isOfferAccepted",
+      args: [account.address],
     });
+    
+    let offerLength = await readContract({
+      address: contractAddress,
+      abi: collectionABI,
+      functionName: "getOffersLengths",
+    });
+    
+    for (let i = 0; i < offerLength; i++) {
+      let offer = await readContract({
+        address: contractAddress,
+        abi: collectionABI,
+        functionName: "offers",
+        args: [i],
+      });
+
+      offerArray.push(offer);
+      
+    }
+    
+
+    
+    
+    
     console.log(offers);
+    setIsOfferAccepted(isOfferAccepted);
     updateDataFetched(true);
+  }
+
+  async function makeAnOffer(contractAddress,price) {
+        await writeContract({
+          address: contractAddress,
+          abi: collectionABI,
+          functionName: "makeAnOffer",
+          account: account.address,
+          args: [price],
+        });
+        
   }
 
 
