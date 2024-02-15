@@ -88,8 +88,9 @@ const NFTCollectionPage = () => {
       abi: collectionABI,
       functionName: "isOfferAccepted",
       args: [account.address],
+      account: account.address,
     });
-    
+    console.log(isOfferAccepted);
     let offerLength = await readContract({
       address: contractAddress,
       abi: collectionABI,
@@ -114,7 +115,7 @@ const NFTCollectionPage = () => {
     }
     
     
-    console.log(offerArray);
+   
     
     
     
@@ -202,7 +203,7 @@ const NFTCollectionPage = () => {
       alert("Upload Error" + e);
     }
   }
- console.log(isOfferAccepted)
+ 
   async function getNFTCollectionData(contractAddress) {
     let tokenURI = await readContract({
       address: contractAddress,
