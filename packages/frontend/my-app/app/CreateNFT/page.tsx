@@ -111,7 +111,7 @@ const Page = () => {
 
   return (
     <div className="flex flex-col items-center mt-10 ">
-      <form className="w-full max-w-lg bg-gradient-to-r from-amber-600 to-amber-400 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 ">
+      <form className="border-r-8 border-black border-b-8 border-black w-full max-w-lg bg-gradient-to-r from-amber-600 to-amber-400 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 ">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-900 to-violet-500 bg-clip-text text-transparent mb-8 text-center">
           Upload Your NFT to the Marketplace
         </h2>
