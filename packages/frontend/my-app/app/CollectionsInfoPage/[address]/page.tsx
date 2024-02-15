@@ -502,7 +502,7 @@ const NFTCollectionPage = () => {
               Add NFT to Collection
             </button>
           </div>
-          <div className="mt-5 flex  ">
+          <div className="mt-5 flex flex-col justify-center overflow-y-scroll bg-gradient-to-r from-amber-600 to-amber-400 h-64 w-[700px] ml-[32%]">
             {offerArray.length > 0  ? (
               offerArray.map((value, index) => (
                 
