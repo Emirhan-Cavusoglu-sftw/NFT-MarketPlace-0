@@ -24,7 +24,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="bg-gradient-to-r from-purple-950 to-yellow-500">
+    <div className="bg-gradient-to-r from-purple-950 to-yellow-500">
       <div className=" flex justify-between items-center h-20 mr-20 ml-5">
         <Link href="/">
           <div className="flex items-center ">
@@ -35,7 +35,7 @@ const Header = () => {
               height={20}
               className="mt-2"
             />
-            <h1 className="text-white ml-2 font-bold text-xl">NFT Marketplace</h1>
+            <h1 className="text-white ml-2 font-bold text-xl pl-5">NFT Marketplace</h1>
           </div>
         </Link>
 
@@ -108,7 +108,7 @@ const Header = () => {
 
         <ConnectButton />
       </div>
-    </header>
+    </div>
   );
 };
 
