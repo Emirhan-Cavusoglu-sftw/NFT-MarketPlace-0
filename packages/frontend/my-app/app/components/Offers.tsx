@@ -15,7 +15,7 @@ const Offers = ({data,contractAddress}) => {
         address: contractAddress,
         abi: collectionABI,
         functionName: "acceptOffer",
-        args: [contractAddress],
+        args: [data.address],
         account: account.address,
        })
     } catch (e) {
