@@ -25,6 +25,9 @@ const NFTCollectionPage = () => {
     description: "",
     price: "",
   });
+  const [offerParams, updateOfferParams ] = useState({
+    price: "",
+  });
   const [isOfferAccepted, setIsOfferAccepted] = useState(false);  
   const [infoPopup, setInfoPopup] = useState(false);
   const [offerArray, setOfferArray] = useState([]);
@@ -330,19 +333,37 @@ const NFTCollectionPage = () => {
             </div>
           </div>
           <div className="px-6 py-4 flex justify-center items-center">
+
             {account.address !== data.owner &&
             account.address !== data.seller ? (
+             <div> <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="number"
+              placeholder="ETH"
+              step="0.01"
+              onChange={(e) =>
+                updateOfferParams({ price: e.target.value })
+              }
+            />
               <button
                 className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
-                onClick={() => buyNFTCollection(contractAddress)}
+                onClick={() => makeAnOffer(contractAddress,price)}
               >
-                Buy this Collection
-              </button>
+                Make an Offer
+              </button> </div>
             ) : (
               <div className="text-green-600 font-semibold">
                 You are the owner of this NFT
               </div>
             )}
+          </div>
+          <div className="px-6 py-4 flex justify-center items-center">
+            {isOfferAccepted && ( 
+            <button
+            className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
+            onClick={() => buyNFTCollection(contractAddress) } >
+              Offer Accepted
+            </button> )}
           </div>
         </div>
       </div>

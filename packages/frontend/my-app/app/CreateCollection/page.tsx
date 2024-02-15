@@ -83,7 +83,7 @@ const Page = () => {
 
       const symbol = formParams.symbol;
       const name = formParams.name;
-      const price = formParams.price;
+      const price = parseEther(formParams.price);
 
       await writeContract({
         address: collectionFactoryAddress,
@@ -93,7 +93,6 @@ const Page = () => {
       });
 
       alert("Successfully listed your NFT!");
-
       window.location.replace("/");
     } catch (e) {
       alert("Upload error" + e);
