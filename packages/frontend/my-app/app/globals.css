@@ -52,7 +52,7 @@ body {
   padding: 0;
   width: 100vw;
  
-  background-image: linear-gradient(to right, #14171A,#6930C3 );
+  background-image: linear-gradient(to right,  );
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -61,7 +61,7 @@ body {
 .background{
   width: 100vw;
   height: 150dvb;
-  background-image: linear-gradient(to right, #14171A,#6930C3 );
+  background-image: linear-gradient(to right, #3b0764, #6930C3  );
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -70,7 +70,7 @@ body {
 .pagebackground{
   width: 100vw;
 
-  background-image: linear-gradient(to right, #14171A,#6930C3 );
+  background-image: linear-gradient(to right,#3b0764,#6930C3 );
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;

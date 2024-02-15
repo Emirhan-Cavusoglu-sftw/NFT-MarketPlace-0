@@ -24,7 +24,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="bg-gradient-to-r from-stone-900 to-yellow-500">
+    <header className="bg-gradient-to-r from-purple-950 to-yellow-500">
       <div className=" flex justify-between items-center h-20 mr-20 ml-5">
         <Link href="/">
           <div className="flex items-center ">

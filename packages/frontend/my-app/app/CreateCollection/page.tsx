@@ -99,23 +99,23 @@ const Page = () => {
 
   return (
     <div className="flex flex-col items-center mt-10 ">
-      <form className="w-full max-w-lg bg-gradient-to-r from-yellow-800 to-yellow-400 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 ">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent mb-8 text-center">
+      <form className="w-full max-w-lg bg-gradient-to-r from-amber-600 to-amber-400 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 ">
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-900 to-violet-500 bg-clip-text text-transparent mb-8 text-center">
           Create Your Own NFT Collection
         </h2>
         <div className="mb-6">
           <label
             className="block 
-            bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+            text-white bg-clip-text text-transparent text-sm  mb-2"
             htmlFor="name"
           >
             Collection Name
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3  bg-gray-200 leading-tight focus:outline-none focus:shadow-outline"
             id="name"
             type="text"
-            placeholder="Axie#4563"
+            placeholder=""
             onChange={(e) =>
               updateFormParams({ ...formParams, name: e.target.value })
             }
@@ -123,15 +123,15 @@ const Page = () => {
         </div>
         <div className="mb-6">
           <label
-            className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+            className="block text-white bg-clip-text text-transparent text-sm mb-2"
             htmlFor="description"
           >
             Collection Symbol
           </label>
           <textarea
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 leading-tight focus:outline-none focus:shadow-outline"
             id="description"
-            placeholder="Axie Infinity Collection"
+            placeholder=""
             onChange={(e) =>
               updateFormParams({ ...formParams, symbol: e.target.value })
             }
@@ -139,15 +139,15 @@ const Page = () => {
         </div>
         <div className="mb-6">
           <label
-            className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+            className="block text-white bg-clip-text text-transparent text-sm mb-2"
             htmlFor="description"
           >
             NFT Description
           </label>
           <textarea
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 leading-tight focus:outline-none focus:shadow-outline"
             id="description"
-            placeholder="Axie Infinity Collection"
+            placeholder=""
             onChange={(e) =>
               updateFormParams({ ...formParams, description: e.target.value })
             }
@@ -156,7 +156,7 @@ const Page = () => {
 
         <div className="mb-6">
           <label
-            className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+            className="block text-white bg-clip-text text-transparent text-sm  mb-2"
             htmlFor="image"
           >
             Upload Image (&lt;1000 KB)
