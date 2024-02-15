@@ -345,7 +345,7 @@ const NFTCollectionPage = () => {
           </div>
           <div className="px-6 py-4 flex justify-center flex-col text-center items-center">
 
-            {!isOfferAccepted && (
+            {data.owner !== account.address && (
              <div> <input
               className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="number"
