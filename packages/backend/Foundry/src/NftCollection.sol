@@ -16,6 +16,7 @@ contract NFTCollection is ERC721URIStorage {
     mapping(address => bool) private userDataUpdated;
     address public owner;
     uint256 public collectionPrice;
+    
 
     uint256 listingPrice = 0.001 ether;
 
@@ -44,19 +45,38 @@ contract NFTCollection is ERC721URIStorage {
 
     mapping(address => bool) public isOfferAccepted;
     mapping(address => uint256) public addressToOfferPrice;
+    mapping(address => uint256) public offerToOfferOwner;
+    mapping(address => bool) public isOwnerCreatedOffer;
+    
 
-    function makeOffer(uint256 price) public {
+    function makeOffer(uint256 price) public  {
+        if(isOwnerCreatedOffer[msg.sender] == true){
+            offers[offerToOfferOwner[msg.sender]]= Offer(msg.sender,price);
+        }else{
+
+
         offers.push(Offer(msg.sender, price));
-
         isOfferAccepted[msg.sender] = false;
         addressToOfferPrice[msg.sender] = price;
+        offerToOfferOwner[msg.sender] = offers.length;
+        isOwnerCreatedOffer[msg.sender] = true;
+        }
     }
 
     function acceptOffer(address offerOwner) public {
         require(msg.sender == owner, "Only owner can call");
         collectionPrice = addressToOfferPrice[offerOwner];
-
         isOfferAccepted[offerOwner] = true;
+        
+        for(uint256 i=0;i<offers.length;i++){
+            address ownerAddress = offers[i].offerOwner;
+            isOwnerCreatedOffer[ownerAddress] = false;
+            offerToOfferOwner[ownerAddress] = 0;
+            
+            addressToOfferPrice[ownerAddress] = 0;
+
+        }
+
 
         while (offers.length > 0) {
             offers.pop();
@@ -164,6 +184,7 @@ contract NFTCollection is ERC721URIStorage {
         payable(owner).transfer(msg.value);
         owner = payable(msg.sender);
         userDataUpdated[owner] = true;
+        isOfferAccepted[msg.sender] = false;
     }
 
     function executeSale(uint256 tokenId) public payable {
@@ -194,10 +215,7 @@ contract NFTCollection is ERC721URIStorage {
         return listingPrice;
     }
 
-    function getLatestidToListedNft() public view returns (ListedNft memory) {
-        uint256 currentTokenId = _tokenIds.current();
-        return idToListedNft[currentTokenId];
-    }
+    
 
     function getListedNftForId(
         uint256 tokenId
@@ -205,11 +223,12 @@ contract NFTCollection is ERC721URIStorage {
         return idToListedNft[tokenId];
     }
 
-    function getCurrentToken() public view returns (uint256) {
-        return _tokenIds.current();
-    }
+    
 
     function getuserDataUpdated(address user) public view returns (bool) {
         return userDataUpdated[user];
+    }
+    function getOffersLengths() public view returns(uint256){
+        return offers.length;
     }
 }
