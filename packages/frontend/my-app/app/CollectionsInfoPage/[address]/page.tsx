@@ -421,7 +421,7 @@ const NFTCollectionPage = () => {
         </>
         <div className="flex flex-col items-center justify-center text-center">
           <h2 className="text-2xl font-bold mb-8  bg-gradient-to-r from-yellow-800 to-yellow-400 bg-clip-text text-transparent mt-10">
-            Your NFTs
+            Collection NFTs
           </h2>
           <div className="grid grid-cols-1 items-center justify-center md:grid-cols-2 lg:grid-cols-3 gap-4">
             {nftsData.length > 0 ? (
