@@ -15,9 +15,10 @@ contract NFTCollection is ERC721URIStorage {
     Counters.Counter private _itemsSold;
     mapping(address=>bool) private userDataUpdated;
     address public owner;
+    uint256 public collectionPrice;
 
-    uint256 listingPrice = 0.01 ether;
-    uint256 collectionPrice;
+    uint256 listingPrice = 0.001 ether;
+    
 
     struct ListedNft {
         uint256 tokenId;
@@ -41,12 +42,14 @@ contract NFTCollection is ERC721URIStorage {
         string memory name,
         string memory symbol,
         string memory _collectionURI,
+        uint256 _collectionPrice,
         address _owner,
         uint256 id
     ) ERC721(name, symbol) {
         owner = payable(_owner);
         collectionURI = _collectionURI;
         collectionId = id;
+        collectionPrice = _collectionPrice;
         userDataUpdated[owner] = true;
         // collectionPrice = _collectionPrice;
     }
@@ -126,9 +129,9 @@ contract NFTCollection is ERC721URIStorage {
     }
 
     function sellTheCollection() public payable {
-        uint256 totalPrice = calculateTotalPrice();
+        
         uint256 currentTokenId = _tokenIds.current();
-        require(msg.value == totalPrice, "totalPrice is not correct");
+        require(msg.value == collectionPrice, "totalPrice is not correct");
         
         userDataUpdated[owner] = false;
         for (uint256 i = 1; i <= currentTokenId; i++) {

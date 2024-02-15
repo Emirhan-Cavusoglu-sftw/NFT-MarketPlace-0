@@ -18,12 +18,14 @@ contract NFTCollectionFactory {
         string memory _name,
         string memory _symbol,
         string memory _tokenURI,
+        uint256 _collectionPrice,
         address owner
     ) public {
         NFTCollection nftCollectionContractVariable = new NFTCollection(
             _name,
             _symbol,
             _tokenURI,
+            _collectionPrice,
             owner,
             numberOfCreatedCollection
         );

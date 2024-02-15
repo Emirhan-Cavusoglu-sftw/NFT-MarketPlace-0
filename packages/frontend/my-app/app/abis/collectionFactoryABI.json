@@ -79,6 +79,11 @@
 				"type": "string"
 			},
 			{
+				"internalType": "uint256",
+				"name": "_collectionPrice",
+				"type": "uint256"
+			},
+			{
 				"internalType": "address",
 				"name": "owner",
 				"type": "address"
