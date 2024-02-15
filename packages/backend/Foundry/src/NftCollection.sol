@@ -13,12 +13,11 @@ contract NFTCollection is ERC721URIStorage {
     Counters.Counter public _tokenIds;
     string public collectionURI;
     Counters.Counter private _itemsSold;
-    mapping(address=>bool) private userDataUpdated;
+    mapping(address => bool) private userDataUpdated;
     address public owner;
     uint256 public collectionPrice;
 
     uint256 listingPrice = 0.001 ether;
-    
 
     struct ListedNft {
         uint256 tokenId;
@@ -35,6 +34,34 @@ contract NFTCollection is ERC721URIStorage {
         uint256 price,
         bool currentlyListed
     );
+
+    struct Offer {
+        address offerOwner;
+        uint256 offerPrice;
+    }
+
+    Offer[] public offers;
+
+    mapping(address => bool) public isOfferAccepted;
+    mapping(address => uint256) public addressToOfferPrice;
+
+    function makeOffer(uint256 price) public {
+        offers.push(Offer(msg.sender, price));
+
+        isOfferAccepted[msg.sender] = false;
+        addressToOfferPrice[msg.sender] = price;
+    }
+
+    function acceptOffer(address offerOwner) public {
+        require(msg.sender == owner, "Only owner can call");
+        collectionPrice = addressToOfferPrice[offerOwner];
+
+        isOfferAccepted[offerOwner] = true;
+
+        while (offers.length > 0) {
+            offers.pop();
+        }
+    }
 
     mapping(uint256 => ListedNft) public idToListedNft;
 
@@ -54,15 +81,10 @@ contract NFTCollection is ERC721URIStorage {
         // collectionPrice = _collectionPrice;
     }
 
-    
-
-    
-
-    function createToken(string memory tokenURI, uint256 price)
-        public
-        payable
-        returns (uint256)
-    {
+    function createToken(
+        string memory tokenURI,
+        uint256 price
+    ) public payable returns (uint256) {
         _tokenIds.increment();
         uint256 newTokenId = _tokenIds.current();
 
@@ -129,10 +151,9 @@ contract NFTCollection is ERC721URIStorage {
     }
 
     function sellTheCollection() public payable {
-        
         uint256 currentTokenId = _tokenIds.current();
         require(msg.value == collectionPrice, "totalPrice is not correct");
-        
+
         userDataUpdated[owner] = false;
         for (uint256 i = 1; i <= currentTokenId; i++) {
             address seller = idToListedNft[i].seller;
@@ -178,11 +199,9 @@ contract NFTCollection is ERC721URIStorage {
         return idToListedNft[currentTokenId];
     }
 
-    function getListedNftForId(uint256 tokenId)
-        public
-        view
-        returns (ListedNft memory)
-    {
+    function getListedNftForId(
+        uint256 tokenId
+    ) public view returns (ListedNft memory) {
         return idToListedNft[tokenId];
     }
 
@@ -190,7 +209,7 @@ contract NFTCollection is ERC721URIStorage {
         return _tokenIds.current();
     }
 
-    function getuserDataUpdated(address user) public view returns(bool){
+    function getuserDataUpdated(address user) public view returns (bool) {
         return userDataUpdated[user];
     }
 }
