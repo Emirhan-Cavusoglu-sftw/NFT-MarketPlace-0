@@ -57,6 +57,11 @@ const NFTCollectionPage = () => {
 
   const listedPrice = listingPrice;
 
+  const { data: collectionPrice } = useContractRead({
+    address: contractAddress,
+    abi: collectionABI,
+    functionName: "collectionPrice",
+  });
   const { data: totalPrice } = useContractRead({
     address: contractAddress,
     abi: collectionABI,
@@ -178,7 +183,7 @@ const NFTCollectionPage = () => {
 
   async function buyNFTCollection(contractAddress) {
     try {
-      const price = parseEther(formatEther(totalPrice));
+      const price = parseEther(formatEther(collectionPrice));
       setInfoPopup(true);
 
       const { hash } = await writeContract({
@@ -211,17 +216,17 @@ const NFTCollectionPage = () => {
       functionName: "collectionURI",
     });
     
-    let totalPrice = await readContract({
+    let collectionPrice = await readContract({
       address: contractAddress,
       abi: collectionABI,
-      functionName: "calculateTotalPrice",
+      functionName: "collectionPrice",
     });
     let owner = await readContract({
       address: contractAddress,
       abi: collectionABI,
       functionName: "owner",
     });
-    // console.log(totalPrice);
+    // console.log(collectionPrice);
 
     tokenURI = GetIpfsUrlFromPinata(tokenURI);
     let meta = await axios.get(tokenURI);
@@ -230,7 +235,7 @@ const NFTCollectionPage = () => {
 
     let item = {
       owner: owner,
-      price: totalPrice,
+      price: collectionPrice,
       image: meta.image,
       name: meta.name,
       description: meta.description,
@@ -338,10 +343,9 @@ const NFTCollectionPage = () => {
               Owner: <span className="font-semibold">{data.owner}</span>
             </div>
           </div>
-          <div className="px-6 py-4 flex justify-center items-center">
+          <div className="px-6 py-4 flex justify-center flex-col text-center items-center">
 
-            {account.address !== data.owner &&
-            account.address !== data.seller ? (
+            {!isOfferAccepted && (
              <div> <input
               className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="number"
@@ -357,10 +361,11 @@ const NFTCollectionPage = () => {
               >
                 Make an Offer
               </button> </div>
-            ) : (
-              <div className="text-green-600 font-semibold">
-                You are the owner of this NFT
-              </div>
+            ) }
+
+
+            {data.owner == account.address && (
+              <p>YOU ARE THE OWNER</p>
             )}
           </div>
           <div className="px-6 py-4 flex justify-center items-center">
@@ -368,7 +373,7 @@ const NFTCollectionPage = () => {
             <button
             className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
             onClick={() => buyNFTCollection(contractAddress) } >
-              Offer Accepted
+              Your offer accepted click to buy this collection 
             </button> )}
           </div>
         </div>
