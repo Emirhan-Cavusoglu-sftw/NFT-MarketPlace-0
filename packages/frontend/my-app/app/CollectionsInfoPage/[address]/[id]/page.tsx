@@ -94,7 +94,7 @@ const NftInfoPage = () => {
           </Link>
         </button>
 
-        <div className="bg-gradient-to-r from-yellow-800 to-yellow-400  rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-gradient-to-r from-amber-600 to-amber-400  rounded-lg shadow-lg overflow-hidden">
           <img src={data.image} alt="" className="w-full h-64 object-cover" />
           <div className="px-6 py-4">
             <h2 className="text-xl font-semibold text-white mb-2">

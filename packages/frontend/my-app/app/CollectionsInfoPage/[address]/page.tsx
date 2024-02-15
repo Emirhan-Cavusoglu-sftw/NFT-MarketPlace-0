@@ -312,28 +312,28 @@ const NFTCollectionPage = () => {
         <>
           {showPopup && (
             <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-              <div className="bg-gradient-to-r from-yellow-800 to-yellow-400 p-8 rounded-lg shadow-lg">
+              <div className="bg-gradient-to-r from-amber-600 to-amber-400 p-8 rounded-lg shadow-lg">
                 <button
                   className="flex ml-auto "
                   onClick={() => setShowPopup(false)}
                 >
                   ✕
                 </button>
-                <h2 className="text-xl font-bold mb-4">
+                <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-900 to-violet-500 bg-clip-text text-transparent">
                   Upload Your NFT to the Marketplace
                 </h2>
                 <div className="mb-6">
                   <label
-                    className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+                    className="block text-white text-transparent text-sm mb-2"
                     htmlFor="name"
                   >
                     NFT Name
                   </label>
                   <input
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
                     id="name"
                     type="text"
-                    placeholder="Axie#4563"
+                    placeholder=""
                     onChange={(e) =>
                       updateFormParams({ ...formParams, name: e.target.value })
                     }
@@ -341,15 +341,15 @@ const NFTCollectionPage = () => {
                 </div>
                 <div className="mb-6">
                   <label
-                    className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
-                    htmlFor="description"
+                    className="block text-white text-transparent text-sm mb-2"
+                    htmlFor=""
                   >
                     NFT Description
                   </label>
                   <textarea
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
                     id="description"
-                    placeholder="Axie Infinity Collection"
+                    placeholder=""
                     onChange={(e) =>
                       updateFormParams({
                         ...formParams,
@@ -360,7 +360,7 @@ const NFTCollectionPage = () => {
                 </div>
                 <div className="mb-6">
                   <label
-                    className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+                    className="block text-white text-transparent text-sm mb-2"
                     htmlFor="price"
                   >
                     Price (in ETH)
@@ -377,7 +377,7 @@ const NFTCollectionPage = () => {
                 </div>
                 <div className="mb-6">
                   <label
-                    className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-transparent text-sm font-bold mb-2"
+                    className="block text-white text-transparent text-sm mb-2"
                     htmlFor="image"
                   >
                     Upload Image (&lt;1000 KB)

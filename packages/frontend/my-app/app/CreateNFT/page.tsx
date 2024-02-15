@@ -118,7 +118,7 @@ const Page = () => {
         <div className="mb-6">
           <label
             className="block 
-            bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-white text-transparent text-sm mb-2"
+             text-white text-transparent text-sm mb-2"
             htmlFor="name"
           >
             NFT Name
@@ -135,7 +135,7 @@ const Page = () => {
         </div>
         <div className="mb-6">
           <label
-            className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-white text-transparent text-sm  mb-2"
+            className="block  bg-clip-text text-white text-transparent text-sm  mb-2"
             htmlFor="description"
           >
             NFT Description
@@ -151,7 +151,7 @@ const Page = () => {
         </div>
         <div className="mb-6">
           <label
-            className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-white text-transparent text-sm  mb-2"
+            className="block  bg-clip-text text-white text-transparent text-sm  mb-2"
             htmlFor="price"
           >
             Price (in ETH)
@@ -168,7 +168,7 @@ const Page = () => {
         </div>
         <div className="mb-6">
           <label
-            className="block bg-gradient-to-r from-purple-900 to-violet-400 bg-clip-text text-white text-transparent text-sm  mb-2"
+            className="block text-white text-transparent text-sm  mb-2"
             htmlFor="image"
           >
             Upload Image (&lt;1000 KB)
