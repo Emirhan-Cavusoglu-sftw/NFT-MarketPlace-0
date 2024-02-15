@@ -75,7 +75,7 @@ export default function Home() {
     updateCollectionData(items);
     collectionUpdateFetched(true);
   }
-
+  console.log(collectionData);
   return (
     <div className="flex flex-col place-items-center mt-20 pagebackground">
       <div className="md:text-xl font-bold text-white">Top Collections</div>

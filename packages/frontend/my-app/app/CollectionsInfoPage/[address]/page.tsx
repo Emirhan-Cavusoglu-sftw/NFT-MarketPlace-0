@@ -103,8 +103,13 @@ const NFTCollectionPage = () => {
         functionName: "offers",
         args: [i],
       });
-
-      offerArray.push(offer);
+      let offerItem = {
+        address: offer[0],
+        price: offer[1],
+      }
+      offerArray.push(offerItem);
+      updateOfferData(offerArray);
+      console.log(offerArray);
       
     }
     
@@ -112,7 +117,6 @@ const NFTCollectionPage = () => {
     
     
     
-    console.log(offers);
     setIsOfferAccepted(isOfferAccepted);
     updateDataFetched(true);
   }
@@ -121,7 +125,7 @@ const NFTCollectionPage = () => {
         await writeContract({
           address: contractAddress,
           abi: collectionABI,
-          functionName: "makeAnOffer",
+          functionName: "makeOffer",
           account: account.address,
           args: [price],
         });
@@ -204,7 +208,7 @@ const NFTCollectionPage = () => {
       abi: collectionABI,
       functionName: "collectionURI",
     });
-    console.log(tokenURI);
+    
     let totalPrice = await readContract({
       address: contractAddress,
       abi: collectionABI,
@@ -347,7 +351,7 @@ const NFTCollectionPage = () => {
             />
               <button
                 className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
-                onClick={() => makeAnOffer(contractAddress,price)}
+                onClick={() => makeAnOffer(contractAddress,parseEther(offerParams.price))}
               >
                 Make an Offer
               </button> </div>
@@ -497,7 +501,29 @@ const NFTCollectionPage = () => {
               Add NFT to Collection
             </button>
           </div>
-          <div className="mt-5"><Offers/></div>
+          <div className="mt-5 flex  ">
+            {offerData.length > 0  ? (
+              offerArray.map((value, index) => (
+                
+                <Offers
+                  data={value}
+                  key={index}
+                  
+                />
+              ))
+              
+            ) : (
+              <div className="flex flex-col items-center justify-center h-48 bg-gray-200 rounded-lg">
+                <p className="text-xl">There is No Offer</p>
+              </div>
+
+            )}
+            
+            
+            
+            
+            
+            </div>
         </>
         <div className="flex flex-col items-center justify-center text-center">
           <h2 className="text-2xl font-bold mb-8  bg-amber-400 bg-clip-text text-transparent mt-10">

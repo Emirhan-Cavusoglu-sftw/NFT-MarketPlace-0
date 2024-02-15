@@ -1,21 +1,26 @@
 import React from "react";
-
-
+import { formatEther } from "viem";
+import { writeContract } from "wagmi/actions";
+import collectionABI from "../abis/collectionABI.json";
+import { useAccount } from "wagmi";
 //{ data }: any
-const Offers = () => {
+const Offers = ({data}) => {
+  const account = useAccount();
+  // console.log(data);
+  async function acceptOffer(contractAddress) {
+     await writeContract({
+      address: contractAddress,
+      abi: collectionABI,
+      functionName: "acceptOffer",
+      args: [contractAddress],
+      account:account.address
+     })
+  }
   return (
     <div className="flex items-center justify-center ">
-      <div className="bg-gradient-to-r from-amber-600 to-amber-400  rounded-lg shadow-lg overflow-y-scroll h-24 ">
-        {/* <div className="p-2">Address: {data.address}   Offer Price: {data.offerPrice}   Total Volume: {data.totalVolume}</div> */}
-        <div className="p-2">Address: 454532456435135453 Offer Price: 0.25 ETH Total Volume: 1.45 ETH</div>
-        <div className="p-2">Address: 454532456435135453 Offer Price: 0.25 ETH Total Volume: 1.45 ETH</div>
-        <div className="p-2">Address: 454532456435135453 Offer Price: 0.25 ETH Total Volume: 1.45 ETH</div>
-        <div className="p-2">Address: 454532456435135453 Offer Price: 0.25 ETH Total Volume: 1.45 ETH</div>
-        <div className="p-2">Address: 454532456435135453 Offer Price: 0.25 ETH Total Volume: 1.45 ETH</div>
-        <div className="p-2">Address: 454532456435135453 Offer Price: 0.25 ETH Total Volume: 1.45 ETH</div>
-        <div className="p-2">Address: 454532456435135453 Offer Price: 0.25 ETH Total Volume: 1.45 ETH</div>
-        <div className="p-2">Address: 454532456435135453 Offer Price: 0.25 ETH Total Volume: 1.45 ETH</div>
-        <div className="p-2">Address: 454532456435135453 Offer Price: 0.25 ETH Total Volume: 1.45 ETH</div>
+      <div className="bg-gradient-to-r from-amber-600 to-amber-400  rounded-lg shadow-lg  h-24 ">
+        <div className="">Address: {data.address}   Offer Price: {formatEther(data.price)} </div>
+        <button onClick={()=>acceptOffer(data.address)}>Accept This Offer</button>
       </div>
     </div>
   );
