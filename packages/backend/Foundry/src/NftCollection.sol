@@ -58,7 +58,7 @@ contract NFTCollection is ERC721URIStorage {
         offers.push(Offer(msg.sender, price));
         isOfferAccepted[msg.sender] = false;
         addressToOfferPrice[msg.sender] = price;
-        offerToOfferOwner[msg.sender] = offers.length;
+        offerToOfferOwner[msg.sender] = (offers.length)-1;
         isOwnerCreatedOffer[msg.sender] = true;
         }
     }
@@ -105,6 +105,7 @@ contract NFTCollection is ERC721URIStorage {
         string memory tokenURI,
         uint256 price
     ) public payable returns (uint256) {
+        require(msg.sender == owner,"Only Owner Can Create :)");
         _tokenIds.increment();
         uint256 newTokenId = _tokenIds.current();
 
