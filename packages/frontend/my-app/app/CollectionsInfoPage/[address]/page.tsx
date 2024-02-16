@@ -295,6 +295,7 @@ const NFTCollectionPage = () => {
         functionName: "createToken",
         args: [metadataURL, price],
         value: listedPrice,
+        account: account.address,
       });
 
       alert("Successfully listed your NFT!");
