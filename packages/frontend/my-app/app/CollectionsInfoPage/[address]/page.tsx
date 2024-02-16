@@ -370,12 +370,14 @@ const NFTCollectionPage = () => {
             )}
           </div>
         </div>
-        <div className="mt-10 flex flex-col justify-center overflow-y-scroll bg-gradient-to-r from-amber-600 to-amber-400 h-64 w-[700px]">
+        <div className="mt-10 space-y-4  pr-2 overflow-y-scroll   
+           scrollbar-track-transparent scrollbar-thumb-white scrollbar-thin  h-24   bg-transparent   w-[700px]">
             {offerArray.length > 0 ? (
               offerArray.map((value, index) => (
                 <Offers
                   data={value}
                   contractAddress={contractAddress}
+                  collectionOwner={data.owner}
                   key={index}
                 />
               ))
