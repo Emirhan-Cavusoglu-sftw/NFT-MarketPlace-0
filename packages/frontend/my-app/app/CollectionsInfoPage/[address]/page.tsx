@@ -161,7 +161,7 @@ const NFTCollectionPage = () => {
         };
 
         return item;
-      })
+      }),
     );
     updateNFTsData(items);
     updateNftDataFetched(true);
@@ -266,7 +266,7 @@ const NFTCollectionPage = () => {
         setFileURL(response.pinataURL);
         setIsFileUploaded(true);
         updateMessage(
-          "Image uploaded successfully! you can now click on Create NFT!"
+          "Image uploaded successfully! you can now click on Create NFT!",
         );
         setEnableButton(true);
       }
@@ -284,7 +284,7 @@ const NFTCollectionPage = () => {
       if (metadataURL === -1) return;
 
       updateMessage(
-        "Uploading NFT(takes 5 mins).. please dont click anything!"
+        "Uploading NFT(takes 5 mins).. please dont click anything!",
       );
 
       const price = parseEther(formParams.price);
@@ -308,11 +308,11 @@ const NFTCollectionPage = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center mt-10 flex-col">
-        <div className="bg-gradient-to-r from-amber-600 to-amber-400  rounded-lg shadow-lg overflow-hidden">
-          <img src={data.image} alt="" className="w-full h-64 object-cover" />
+      <div className="mt-10 flex flex-col items-center justify-center">
+        <div className="overflow-hidden rounded-lg bg-gradient-to-r  from-amber-600 to-amber-400 shadow-lg">
+          <img src={data.image} alt="" className="h-64 w-full object-cover" />
           <div className="px-6 py-4">
-            <h2 className="text-xl font-semibold text-white mb-2">
+            <h2 className="mb-2 text-xl font-semibold text-white">
               {data.name}
             </h2>
             <p className="text-white">{data.description}</p>
@@ -329,19 +329,19 @@ const NFTCollectionPage = () => {
               Owner: <span className="font-semibold">{data.owner}</span>
             </div>
           </div>
-          <div className="px-6 py-4 flex justify-center flex-col text-center items-center">
+          <div className="flex flex-col items-center justify-center px-6 py-4 text-center">
             {data.owner !== account.address && (
               <div className="flex flex-col space-y-5">
                 {" "}
                 <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="focus:shadow-outline w-full appearance-none rounded border bg-gray-200 px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
                   type="number"
                   placeholder="ETH"
                   step="0.01"
                   onChange={(e) => updateOfferParams({ price: e.target.value })}
                 />
                 <button
-                  className="bg-gradient-to-r from-purple-900 to-violet-600 text-white font-bold py-2 rounded-full text-sm mt-3"
+                  className="mt-3 rounded-full bg-gradient-to-r from-purple-900 to-violet-600 py-2 text-sm font-bold text-white"
                   onClick={() =>
                     makeAnOffer(contractAddress, parseEther(offerParams.price))
                   }
@@ -349,7 +349,7 @@ const NFTCollectionPage = () => {
                   Make an Offer
                 </button>
                 <button
-                  className="bg-gradient-to-r from-purple-900 to-violet-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                  className="focus:shadow-outline rounded-full bg-gradient-to-r from-purple-900 to-violet-600 px-4 py-2 font-bold text-white focus:outline-none"
                   onClick={() => setShowPopup(true)}
                 >
                   Add NFT to Collection
@@ -359,10 +359,10 @@ const NFTCollectionPage = () => {
 
             {data.owner == account.address && <p>YOU ARE THE OWNER</p>}
           </div>
-          <div className="px-6 py-4 flex justify-center items-center">
+          <div className="flex items-center justify-center px-6 py-4">
             {isOfferAccepted && (
               <button
-                className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
+                className="rounded-full bg-[#7D3799] px-4 py-2 text-sm font-bold text-white hover:bg-purple-900"
                 onClick={() => buyNFTCollection(contractAddress)}
               >
                 Your offer accepted click to buy this collection
@@ -370,34 +370,36 @@ const NFTCollectionPage = () => {
             )}
           </div>
         </div>
-        <div className="mt-10 space-y-4  pr-2 overflow-y-scroll   
-           scrollbar-track-transparent scrollbar-thumb-white scrollbar-thin  h-24   bg-transparent   w-[700px]">
-            {offerArray.length > 0 ? (
-              offerArray.map((value, index) => (
-                <Offers
-                  data={value}
-                  contractAddress={contractAddress}
-                  collectionOwner={data.owner}
-                  key={index}
-                />
-              ))
-            ) : (
-              <div className="flex flex-col items-center justify-center h-48 bg-gray-200 rounded-lg">
-                <p className="text-xl">There is No Offer</p>
-              </div>
-            )}
-          </div>
+        <div
+          className="scrollbar-track-transparent scrollbar-thumb-white  scrollbar-thin mt-10   
+           h-24 w-[700px] space-y-4  overflow-y-scroll   bg-transparent   pr-2"
+        >
+          {offerArray.length > 0 ? (
+            offerArray.map((value, index) => (
+              <Offers
+                data={value}
+                contractAddress={contractAddress}
+                collectionOwner={data.owner}
+                key={index}
+              />
+            ))
+          ) : (
+            <div className="flex h-48 flex-col items-center justify-center rounded-lg bg-gray-200">
+              <p className="text-xl">There is No Offer</p>
+            </div>
+          )}
+        </div>
       </div>
 
       {infoPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-red-800 p-2 rounded-lg shadow-lg h-50 w-50">
+        <div className="h-50 w-50 fixed inset-0 flex items-center justify-center rounded-lg bg-red-800 p-2 shadow-lg">
           <p className="text-white">
             Buying the NFT... Please Wait (Upto 5 mins)
           </p>
         </div>
       )}
       {finalInfoPopup && (
-        <div className="fixed inset-0 flex flex-col items-center justify-center bg-green-700 p-2 rounded-lg shadow-lg h-50 w-50">
+        <div className="h-50 w-50 fixed inset-0 flex flex-col items-center justify-center rounded-lg bg-green-700 p-2 shadow-lg">
           <p className="text-black">
             Your NFT collection has been bought successfully!
           </p>
@@ -408,29 +410,31 @@ const NFTCollectionPage = () => {
         </div>
       )}
 
+      
       <>
+      <div className="flex flex-col justify-center items-center text-center">
         <>
           {showPopup && (
-            <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-              <div className="bg-gradient-to-r from-amber-600 to-amber-400 p-8 rounded-lg shadow-lg">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
+              <div className="rounded-lg bg-gradient-to-r from-amber-600 to-amber-400 p-8 shadow-lg">
                 <button
-                  className="flex ml-auto "
+                  className="ml-auto flex "
                   onClick={() => setShowPopup(false)}
                 >
                   ✕
                 </button>
-                <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-900 to-violet-500 bg-clip-text text-transparent">
+                <h2 className="mb-4 bg-gradient-to-r from-purple-900 to-violet-500 bg-clip-text text-2xl font-bold text-transparent">
                   Upload Your NFT to the Marketplace
                 </h2>
                 <div className="mb-6">
                   <label
-                    className="block text-white text-transparent text-sm mb-2"
+                    className="mb-2 block text-sm text-transparent text-white"
                     htmlFor="name"
                   >
                     NFT Name
                   </label>
                   <input
-                    className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight shadow focus:outline-none"
                     id="name"
                     type="text"
                     placeholder=""
@@ -441,13 +445,13 @@ const NFTCollectionPage = () => {
                 </div>
                 <div className="mb-6">
                   <label
-                    className="block text-white text-transparent text-sm mb-2"
+                    className="mb-2 block text-sm text-transparent text-white"
                     htmlFor=""
                   >
                     NFT Description
                   </label>
                   <textarea
-                    className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight shadow focus:outline-none"
                     id="description"
                     placeholder=""
                     onChange={(e) =>
@@ -460,13 +464,13 @@ const NFTCollectionPage = () => {
                 </div>
                 <div className="mb-6">
                   <label
-                    className="block text-white text-transparent text-sm mb-2"
+                    className="mb-2 block text-sm text-transparent text-white"
                     htmlFor="price"
                   >
                     Price (in ETH)
                   </label>
                   <input
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
                     type="number"
                     placeholder="Min 0.01 ETH"
                     step="0.01"
@@ -477,21 +481,21 @@ const NFTCollectionPage = () => {
                 </div>
                 <div className="mb-6">
                   <label
-                    className="block text-white text-transparent text-sm mb-2"
+                    className="mb-2 block text-sm text-transparent text-white"
                     htmlFor="image"
                   >
                     Upload Image (&lt;1000 KB)
                   </label>
-                  <div className="flex items-center justify-between bg-gray-100 border-2 border-gray-200 rounded-md py-2 px-4">
+                  <div className="flex items-center justify-between rounded-md border-2 border-gray-200 bg-gray-100 px-4 py-2">
                     <input type={"file"} onChange={OnChangeFile} />
                   </div>
                 </div>
-                <div className="text-red-500 text-sm mb-4 text-center">
+                <div className="mb-4 text-center text-sm text-red-500">
                   {message}
                 </div>
                 {enableButton ? (
                   <button
-                    className="w-full bg-gradient-to-r from-purple-900 to-violet-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    className="focus:shadow-outline w-full rounded bg-gradient-to-r from-purple-900 to-violet-400 px-4 py-2 font-bold text-white focus:outline-none"
                     onClick={(e) => {
                       addNftToCollection(e, contractAddress);
                       setShowPopup(false);
@@ -502,7 +506,7 @@ const NFTCollectionPage = () => {
                 ) : (
                   <button
                     disabled
-                    className="w-full bg-gray-400 text-white font-bold py-2 px-4 rounded cursor-not-allowed"
+                    className="w-full cursor-not-allowed rounded bg-gray-400 px-4 py-2 font-bold text-white"
                   >
                     Create NFT
                   </button>
@@ -510,13 +514,12 @@ const NFTCollectionPage = () => {
               </div>
             </div>
           )}
-
         </>
         <div className="flex flex-col items-center justify-center text-center">
-          <h2 className="text-2xl font-bold mb-8  bg-amber-400 bg-clip-text text-transparent mt-10">
+          <h2 className="mb-8 mt-10 bg-amber-400  bg-clip-text text-2xl font-bold text-transparent">
             Collection NFTs
           </h2>
-          <div className="grid grid-cols-1 items-center justify-center md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 ml-36 items-center text-center justify-center gap-4 md:grid-cols-2 lg:grid-cols-3">
             {nftsData.length > 0 ? (
               nftsData.map((value, index) => (
                 <CollectionNftCard
@@ -526,12 +529,19 @@ const NFTCollectionPage = () => {
                 />
               ))
             ) : (
-              <div className="flex flex-col items-center justify-center h-48 bg-gray-200 rounded-lg">
-                <p className="text-xl">Loading your NFTs...</p>
+              
+
+              <div className="flex flex-row gap-2    justify-center items-center">
+                <div className="h-4 w-4 animate-bounce rounded-full bg-amber-400 [animation-delay:.7s]"></div>
+                <div className="h-4 w-4 animate-bounce rounded-full bg-amber-400 [animation-delay:.3s]"></div>
+                <div className="h-4 w-4 animate-bounce rounded-full bg-amber-400 [animation-delay:.7s]"></div>
               </div>
+              
+              
             )}
           </div>
         </div>
+      </div>
       </>
     </>
   );
