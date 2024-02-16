@@ -26,10 +26,10 @@ const Offers = ({data,contractAddress}) => {
   }
   return (
     
-    <>
+    <div className="flex flex-col justify-center text-center items-center">
         <h2 className="">Address: {data.address}   Offer Price: {formatEther(data.price)} </h2>
-        <button className="flex  justify-center items-center bg-gradient-to-r from-purple-900 to-violet-400 text-white font-bold py-2 px-4 rounded " 
-        onClick={()=>acceptOffer(contractAddress)}>Accept This Offer</button></>
+        <button className="bg-gradient-to-r from-purple-900 to-violet-400 text-white font-bold py-2 px-4 rounded-full w-44 " 
+        onClick={()=>acceptOffer(contractAddress)}>Accept This Offer</button></div>
       
     
   );

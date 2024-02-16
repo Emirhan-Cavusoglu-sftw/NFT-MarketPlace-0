@@ -25,10 +25,10 @@ const NFTCollectionPage = () => {
     description: "",
     price: "",
   });
-  const [offerParams, updateOfferParams ] = useState({
+  const [offerParams, updateOfferParams] = useState({
     price: "",
   });
-  const [isOfferAccepted, setIsOfferAccepted] = useState(false);  
+  const [isOfferAccepted, setIsOfferAccepted] = useState(false);
   const [infoPopup, setInfoPopup] = useState(false);
   const [offerArray, setOfferArray] = useState([]);
   const [finalInfoPopup, setFinalInfoPopup] = useState(false);
@@ -84,8 +84,6 @@ const NFTCollectionPage = () => {
 
     fetchData();
   }, []);
-  
-
 
   async function getOfferData(contractAddress) {
     let isOfferAccepted = await readContract({
@@ -101,7 +99,7 @@ const NFTCollectionPage = () => {
       abi: collectionABI,
       functionName: "getOffersLengths",
     });
-    
+
     for (let i = 0; i < offerLength; i++) {
       let offer = await readContract({
         address: contractAddress,
@@ -112,36 +110,24 @@ const NFTCollectionPage = () => {
       let offerItem = {
         address: offer[0],
         price: offer[1],
-      }
-      
-      setOfferArray(offerArray => [...offerArray, offerItem]);
-      
-      
+      };
+
+      setOfferArray((offerArray) => [...offerArray, offerItem]);
     }
-    
-    
-   
-    
-    
-    
+
     setIsOfferAccepted(isOfferAccepted);
     updateDataFetched(true);
   }
 
-  async function makeAnOffer(contractAddress,price) {
-        await writeContract({
-          address: contractAddress,
-          abi: collectionABI,
-          functionName: "makeOffer",
-          account: account.address,
-          args: [price],
-        });
-        
+  async function makeAnOffer(contractAddress, price) {
+    await writeContract({
+      address: contractAddress,
+      abi: collectionABI,
+      functionName: "makeOffer",
+      account: account.address,
+      args: [price],
+    });
   }
-
-
-
-
 
   async function getNFTsData(contractAddress) {
     let transaction = await readContract({
@@ -208,14 +194,14 @@ const NFTCollectionPage = () => {
       alert("Upload Error" + e);
     }
   }
- 
+
   async function getNFTCollectionData(contractAddress) {
     let tokenURI = await readContract({
       address: contractAddress,
       abi: collectionABI,
       functionName: "collectionURI",
     });
-    
+
     let collectionPrice = await readContract({
       address: contractAddress,
       abi: collectionABI,
@@ -322,7 +308,7 @@ const NFTCollectionPage = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center mt-10 ">
+      <div className="flex items-center justify-center mt-10 flex-col">
         <div className="bg-gradient-to-r from-amber-600 to-amber-400  rounded-lg shadow-lg overflow-hidden">
           <img src={data.image} alt="" className="w-full h-64 object-cover" />
           <div className="px-6 py-4">
@@ -344,39 +330,61 @@ const NFTCollectionPage = () => {
             </div>
           </div>
           <div className="px-6 py-4 flex justify-center flex-col text-center items-center">
-
             {data.owner !== account.address && (
-             <div> <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="number"
-              placeholder="ETH"
-              step="0.01"
-              onChange={(e) =>
-                updateOfferParams({ price: e.target.value })
-              }
-            />
-              <button
-                className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
-                onClick={() => makeAnOffer(contractAddress,parseEther(offerParams.price))}
-              >
-                Make an Offer
-              </button> </div>
-            ) }
-
-
-            {data.owner == account.address && (
-              <p>YOU ARE THE OWNER</p>
+              <div className="flex flex-col space-y-5">
+                {" "}
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="number"
+                  placeholder="ETH"
+                  step="0.01"
+                  onChange={(e) => updateOfferParams({ price: e.target.value })}
+                />
+                <button
+                  className="bg-gradient-to-r from-purple-900 to-violet-600 text-white font-bold py-2 rounded-full text-sm mt-3"
+                  onClick={() =>
+                    makeAnOffer(contractAddress, parseEther(offerParams.price))
+                  }
+                >
+                  Make an Offer
+                </button>
+                <button
+                  className="bg-gradient-to-r from-purple-900 to-violet-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                  onClick={() => setShowPopup(true)}
+                >
+                  Add NFT to Collection
+                </button>
+              </div>
             )}
+
+            {data.owner == account.address && <p>YOU ARE THE OWNER</p>}
           </div>
           <div className="px-6 py-4 flex justify-center items-center">
-            {isOfferAccepted && ( 
-            <button
-            className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
-            onClick={() => buyNFTCollection(contractAddress) } >
-              Your offer accepted click to buy this collection 
-            </button> )}
+            {isOfferAccepted && (
+              <button
+                className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
+                onClick={() => buyNFTCollection(contractAddress)}
+              >
+                Your offer accepted click to buy this collection
+              </button>
+            )}
           </div>
         </div>
+        <div className="mt-10 flex flex-col justify-center overflow-y-scroll bg-gradient-to-r from-amber-600 to-amber-400 h-64 w-[700px]">
+            {offerArray.length > 0 ? (
+              offerArray.map((value, index) => (
+                <Offers
+                  data={value}
+                  contractAddress={contractAddress}
+                  key={index}
+                />
+              ))
+            ) : (
+              <div className="flex flex-col items-center justify-center h-48 bg-gray-200 rounded-lg">
+                <p className="text-xl">There is No Offer</p>
+              </div>
+            )}
+          </div>
       </div>
 
       {infoPopup && (
@@ -500,38 +508,7 @@ const NFTCollectionPage = () => {
               </div>
             </div>
           )}
-          <div className="flex justify-center mt-4">
-            <button
-              className="bg-gradient-to-r from-purple-900 to-violet-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              onClick={() => setShowPopup(true)}
-            >
-              Add NFT to Collection
-            </button>
-          </div>
-          <div className="mt-5 flex flex-col justify-center overflow-y-scroll bg-gradient-to-r from-amber-600 to-amber-400 h-64 w-[700px] ml-[32%]">
-            {offerArray.length > 0  ? (
-              offerArray.map((value, index) => (
-                
-                <Offers
-                  data={value}
-                  contractAddress={contractAddress}
-                  key={index}
-                  
-                />
-              ))
-              
-            ) : (
-              <div className="flex flex-col items-center justify-center h-48 bg-gray-200 rounded-lg">
-                <p className="text-xl">There is No Offer</p>
-              </div>
 
-            )}
-            
-            
-            
-            
-            
-            </div>
         </>
         <div className="flex flex-col items-center justify-center text-center">
           <h2 className="text-2xl font-bold mb-8  bg-amber-400 bg-clip-text text-transparent mt-10">
@@ -542,7 +519,6 @@ const NFTCollectionPage = () => {
               nftsData.map((value, index) => (
                 <CollectionNftCard
                   data={value}
-                  
                   key={index}
                   className="hover:shadow-lg"
                 />
