@@ -118,12 +118,12 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col place-items-center mt-20 pagebackground">
+    <div className="flex flex-col box-border relative flex-nowrap  place-items-center mt-20 pagebackground">
       <Link href={"/TopNFTs"}>
         <div className="md:text-xl font-bold text-white">Top NFTs</div>
       </Link>
 
-      <div className="flex mt-5 justify-between flex-wrap max-w-screen-xl text-center">
+      <div className="flex mt-5 justify-between relative flex-wrap max-w-screen-xl text-center">
         {data?.map((value, index) => {
           return <NFTCard data={value} key={index}></NFTCard>;
         })}

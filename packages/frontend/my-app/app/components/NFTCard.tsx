@@ -10,14 +10,24 @@ const NFTCard = ({ data }: any) => {
   const IPFSUrl = GetIpfsUrlFromPinata(data.image);
   return (
     <Link href={tO}>
-      <div className="border-2 ml-12 mt-5 mb-12 flex flex-col items-center rounded-lg shadow-2xl">
+      <div
+        className="   
+      
+      
+      
+        relative mb-12 ml-12 
+        mt-5  flex cursor-pointer flex-col items-center rounded-[0.4em]  border-[black] text-lg font-black
+ 
+      
+         shadow-[0.1em_0.1em] hover:translate-x-[-0.05em] hover:translate-y-[-0.05em] hover:shadow-[0.30em_0.30em]  "
+      >
         <img
           src={IPFSUrl}
           alt=""
-          className="w-44 h-44 rounded-lg object-cover"
+          className="h-44 w-44 rounded-lg object-cover"
         />
-        <div className="text-white w-full p-2 bg-gradient-to-t from-[#454545] to-transparent rounded-lg pt-5 -mt-[108px] ">
-          <div className="overflow-hidden whitespace-nowrap text-overflow-ellipsis max-w-[15ch]">
+        <div className="-mt-[108px] w-full rounded-lg bg-gradient-to-t from-[#454545] to-transparent p-2 pt-5 text-white ">
+          <div className="text-overflow-ellipsis max-w-[15ch] overflow-hidden whitespace-nowrap">
             <strong className="text-xl">{data.name}</strong>
           </div>
           <p className="display-inline">{data.description}</p>

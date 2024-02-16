@@ -8,6 +8,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily:{
+        palanquin: ['Palanquin', 'sans-serif'],
+        nabla:["Nabla","cursive"],
+        rightheus:["Righteous", "cursive"],
+        kanit:["Kanit", "sans-serif"],
+        caveat:["Caveat","cursive"],
+        carterone:["Carter One","cursive"],
+        alkatra:["Alkatra","cursive"],
+        poppins:["Poppins","sans-serif"],
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
