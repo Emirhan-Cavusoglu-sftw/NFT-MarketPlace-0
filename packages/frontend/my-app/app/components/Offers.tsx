@@ -26,8 +26,8 @@ const Offers = ({data,contractAddress,collectionOwner}) => {
   }
   return (
     
-    <div className="flex flex-col justify-center text-center items-center bg-gradient-to-r from-amber-600 to-amber-400 rounded-2xl">
-        <h2 className="">Address: {data.address}   Offer Price: {formatEther(data.price)} </h2>
+    <div className="flex space-y-3 flex-col h-9 justify-center text-center items-center bg-gradient-to-r w-full from-amber-600 to-amber-400 rounded-2xl">
+        <h2 className="  text-white font-sans font-semibold">Address: {data.address}   &nbsp;&nbsp;&nbsp; Offer Price:  {formatEther(data.price)} ETH </h2>
         {collectionOwner == account.address &&(
 
           
