@@ -11,18 +11,20 @@ const NFTCollectionCard = ({ data }: any) => {
   const IPFSUrl = GetIpfsUrlFromPinata(data.image);
   return (
 
-      <div className="border-2 ml-12 mt-5 mb-12 flex flex-col items-center rounded-lg shadow-2xl">
+      <div className="relative mb-12 ml-12 mt-5  flex cursor-pointer flex-col items-center 
+      rounded-[0.4em] shadow-[0.25em_0.25em] hover:translate-x-[-0.05em] hover:translate-y-[-0.05em] 
+      hover:shadow-[0.4em_0.4em] font-poppins font-bold text-lg ">
         <Link href={tO}>
         <img
           src={IPFSUrl}
           alt=""
-          className="w-44 h-44 rounded-lg object-cover"
+          className="w-52 h-60 rounded-lg object-cover"
         /></Link>
-        <div className="text-white w-full p-2 bg-gradient-to-t from-[#454545] to-transparent rounded-lg pt-5 -mt-20 ">
-          <div className="overflow-hidden whitespace-nowrap text-overflow-ellipsis max-w-[15ch]">
-          <strong className="text-xl">{data.name}</strong>
+        <div className="text-white w-full flex flex-col items-center text-center p-2 bg-gradient-to-t from-[#454545] to-transparent rounded-lg pt-5 -mt-20 ">
+          <div className="overflow-hidden   max-w-[15ch]">
+          <p className="">{data.name}</p>
           </div>
-          <p className="display-inline">{data.description}</p>
+          <p className="">{data.description}</p>
         </div>
       </div>
     
