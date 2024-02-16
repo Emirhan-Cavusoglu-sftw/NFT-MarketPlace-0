@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { GetIpfsUrlFromPinata } from "../utils/util";
 import { useState } from "react";
-const NFTCollectionCard = ({ data }: any) => {
+const NFTCollectionCard = ({ data }) => {
   // console.log(data);
   const tO = {
     pathname: "/CollectionsInfoPage/" + data.address,

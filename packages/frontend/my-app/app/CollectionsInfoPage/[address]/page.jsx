@@ -17,7 +17,7 @@ import { uploadFileToIPFS, uploadJSONToIPFS } from "@/app/utils/pinata";
 import NFTCard from "@/app/components/NFTCard";
 import dynamic from "next/dynamic";
 import CollectionNftCard from "@/app/components/CollectionNftCard";
-import { info } from "console";
+
 import Offers from "@/app/components/Offers";
 const NFTCollectionPage = () => {
   const [formParams, updateFormParams] = useState({
@@ -145,7 +145,7 @@ const NFTCollectionPage = () => {
           args: [i.tokenId],
         });
 
-        let meta = await axios.get(tokenURI as string);
+        let meta = await axios.get(tokenURI);
         meta = meta.data;
 
         let price = formatEther(i.price.toString());
@@ -255,7 +255,7 @@ const NFTCollectionPage = () => {
       console.log("error uploading JSON metadata:", e);
     }
   }
-  async function OnChangeFile(e: any) {
+  async function OnChangeFile(e) {
     var file = e.target.files[0];
 
     try {

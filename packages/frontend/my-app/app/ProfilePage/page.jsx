@@ -88,7 +88,7 @@ const ProfilePage = () => {
           args: [i.tokenId],
         });
 
-        let meta = await axios.get(tokenURI as string);
+        let meta = await axios.get(tokenURI);
         meta = meta.data;
 
         let price = formatEther(i.price.toString());
@@ -133,7 +133,7 @@ const ProfilePage = () => {
           args: [i.tokenId],
         });
 
-        let meta = await axios.get(tokenURI as string);
+        let meta = await axios.get(tokenURI);
         meta = meta.data;
 
         let price = formatEther(i.price.toString());
@@ -180,7 +180,7 @@ const ProfilePage = () => {
           functionName: "collectionURI",
         });
 
-        let meta = await axios.get(tokenURI as string);
+        let meta = await axios.get(tokenURI);
         meta = meta.data;
 
         let item = {

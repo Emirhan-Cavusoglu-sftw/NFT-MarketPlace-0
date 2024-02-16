@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { GetIpfsUrlFromPinata } from "../utils/util";
 import { useState } from "react";
-const NFTCard = ({ data }: any) => {
+const NFTCard = ({ data }) => {
   // console.log(data);
   const tO = {
     pathname: "/NftInfoPage/" + data.tokenId,

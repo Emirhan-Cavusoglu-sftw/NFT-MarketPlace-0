@@ -1,31 +1,40 @@
 "use client";
 import React from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../utils/pinata";
-import { collectionFactoryAddress } from "../utils/constants";
+import { marketPlaceAddress } from "../utils/constants";
 import { useState } from "react";
 import { useContractRead, useContractWrite, useAccount } from "wagmi";
 import { writeContract } from "wagmi/actions";
-
-import collectionFactoryABI from "../abis/collectionFactoryABI.json";
+import nftMarketPlaceABI from "../abis/nftMarketPlaceABI.json";
 import { parseEther, formatEther } from "viem";
 const Page = () => {
-  const contractAddress = "0xbB6EB8CfA4790Aeb1AA6258c5A03DBD4f3Ac2386";
   const [formParams, updateFormParams] = useState({
     name: "",
-    symbol: "",
-    price: "",
     description: "",
+    price: "",
   });
   const [fileURL, setFileURL] = useState(null);
   const [message, updateMessage] = useState("");
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [enableButton, setEnableButton] = useState(false);
-  const account = useAccount();
 
-  async function OnChangeFile(e: any) {
+  // WAGMI HOOKS
+
+  const { data: listingPrice } = useContractRead({
+    address: marketPlaceAddress,
+    abi: nftMarketPlaceABI,
+    functionName: "getListPrice",
+  });
+
+  // const listedPrice = listingPrice?.toString();
+  const listedPrice = listingPrice;
+  // console.log(listedPrice);
+
+  async function OnChangeFile(e) {
     var file = e.target.files[0];
-
+    //check for file extension
     try {
+      //upload the file to IPFS
       updateMessage("Uploading image to IPFS.. please wait!");
       const response = await uploadFileToIPFS(file);
       if (response.success === true) {
@@ -42,19 +51,17 @@ const Page = () => {
     }
   }
   async function uploadMetadataToIPFS() {
-    const { name, symbol, price,description } = formParams;
+    const { name, description, price } = formParams;
     //Make sure that none of the fields are empty
-    if (!name || !symbol || !price || !description || !isFileUploaded) {
+    if (!name || !description || !price || !isFileUploaded) {
       updateMessage("Please fill all the fields!");
       return -1;
     }
 
     const nftJSON = {
       name,
-      symbol,
-      price,
       description,
-
+      price,
       image: fileURL,
     };
 
@@ -70,7 +77,7 @@ const Page = () => {
     }
   }
 
-  async function createNFTCollection(e: any) {
+  async function createNFT(e) {
     e.preventDefault();
 
     try {
@@ -81,18 +88,21 @@ const Page = () => {
         "Uploading NFT(takes 5 mins).. please dont click anything!"
       );
 
-      const symbol = formParams.symbol;
-      const name = formParams.name;
       const price = parseEther(formParams.price);
 
+      console.log("listedPrice", listedPrice);
+
       await writeContract({
-        address: collectionFactoryAddress,
-        abi: collectionFactoryABI,
-        functionName: "createNFTCollectionContract",
-        args: [name, symbol, metadataURL, price,account.address],
+        address: marketPlaceAddress,
+        abi: nftMarketPlaceABI,
+        functionName: "createToken",
+        args: [metadataURL, price],
+        value: listedPrice,
       });
+      // await transaction.wait()
 
       alert("Successfully listed your NFT!");
+
       window.location.replace("/");
     } catch (e) {
       alert("Upload error" + e);
@@ -101,20 +111,20 @@ const Page = () => {
 
   return (
     <div className="flex flex-col items-center mt-10 ">
-      <form className="border-r-8 border-b-8 border-black w-full max-w-lg bg-gradient-to-r from-amber-600 to-amber-400 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 ">
+      <form className="border-r-8  border-b-8 border-black w-full max-w-lg bg-gradient-to-r from-amber-600 to-amber-400 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 ">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-900 to-violet-500 bg-clip-text text-transparent mb-8 text-center">
-          Create Your Own NFT Collection
+          Upload Your NFT to the Marketplace
         </h2>
         <div className="mb-6">
           <label
             className="block 
-            text-white bg-clip-text text-transparent text-sm  mb-2"
+             text-white text-transparent text-sm mb-2"
             htmlFor="name"
           >
-            Collection Name
+            NFT Name
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3  bg-gray-200 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200  leading-tight focus:outline-none focus:shadow-outline"
             id="name"
             type="text"
             placeholder=""
@@ -125,29 +135,13 @@ const Page = () => {
         </div>
         <div className="mb-6">
           <label
-            className="block text-white bg-clip-text text-transparent text-sm mb-2"
-            htmlFor="description"
-          >
-            Collection Symbol
-          </label>
-          <textarea
-            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 leading-tight focus:outline-none focus:shadow-outline"
-            id="description"
-            placeholder=""
-            onChange={(e) =>
-              updateFormParams({ ...formParams, symbol: e.target.value })
-            }
-          />
-        </div>
-        <div className="mb-6">
-          <label
-            className="block text-white bg-clip-text text-transparent text-sm mb-2"
+            className="block  bg-clip-text text-white text-transparent text-sm  mb-2"
             htmlFor="description"
           >
             NFT Description
           </label>
           <textarea
-            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200  leading-tight focus:outline-none focus:shadow-outline"
             id="description"
             placeholder=""
             onChange={(e) =>
@@ -165,7 +159,7 @@ const Page = () => {
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="number"
-            placeholder="ETH"
+            placeholder="Min 0.01 ETH"
             step="0.01"
             onChange={(e) =>
               updateFormParams({ ...formParams, price: e.target.value })
@@ -174,29 +168,29 @@ const Page = () => {
         </div>
         <div className="mb-6">
           <label
-            className="block text-white bg-clip-text text-transparent text-sm  mb-2"
+            className="block text-white text-transparent text-sm  mb-2"
             htmlFor="image"
           >
             Upload Image (&lt;1000 KB)
           </label>
-          <div className="flex items-center justify-between bg-gray-100 border-2 border-gray-200 rounded-md py-2 px-4">
-            <input type={"file"} onChange={OnChangeFile} />
+          <div className="flex items-center justify-between bg-gray-200 border-2 border-gray-200 rounded-md py-2 px-4">
+            <input  type={"file"} onChange={OnChangeFile} />
           </div>
         </div>
         <div className="text-red-500 text-sm mb-4 text-center">{message}</div>
         {enableButton ? (
           <button
-            className="w-full bg-gradient-to-r from-purple-900 to-violet-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            onClick={createNFTCollection}
+            className="w-full bg-gradient-to-r from-purple-900 to-violet-400  text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            onClick={createNFT}
           >
-            Create NFT Collection
+            Create NFT
           </button>
         ) : (
           <button
             disabled
             className="w-full bg-gray-400 text-white font-bold py-2 px-4 rounded cursor-not-allowed"
           >
-            Create NFT Collection
+            Create NFT
           </button>
         )}
       </form>

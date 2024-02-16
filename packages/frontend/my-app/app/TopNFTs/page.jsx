@@ -29,7 +29,7 @@ export default function Home() {
           args: [i.tokenId],
         });
 
-        let meta = await axios.get(tokenURI as string);
+        let meta = await axios.get(tokenURI);
         meta = meta.data;
         console.log(meta);
 

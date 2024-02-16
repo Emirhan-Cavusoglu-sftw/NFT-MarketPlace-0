@@ -19,7 +19,7 @@ import NFTCollectionCard from "./components/NFTCollectionCard";
 export default function Home() {
   const [data, updateData] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
-  const array: never[] = [];
+  const array = [];
   const [collectionData, updateCollectionData] = useState([]);
   const [collectionArray, updateCollectionArray] = useState([]);
   const [collectionDataFetched, collectionUpdateFetched] = useState(false);
@@ -64,7 +64,7 @@ export default function Home() {
           functionName: "collectionURI",
         });
 
-        let meta = await axios.get(tokenURI as string);
+        let meta = await axios.get(tokenURI);
         meta = meta.data;
 
         let item = {
@@ -77,7 +77,7 @@ export default function Home() {
         return item;
       })
     );
-    updateCollectionData(items as never[]);
+    updateCollectionData(items);
     collectionUpdateFetched(true);
   }
   async function getNFTData() {
@@ -96,7 +96,7 @@ export default function Home() {
           args: [i.tokenId],
         });
 
-        let meta = await axios.get(tokenURI as string);
+        let meta = await axios.get(tokenURI);
         meta = meta.data;
 
         let price = formatEther(i.price.toString());

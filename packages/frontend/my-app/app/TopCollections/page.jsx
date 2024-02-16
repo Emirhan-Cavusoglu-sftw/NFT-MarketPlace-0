@@ -59,7 +59,7 @@ export default function Home() {
           functionName: "collectionURI",
         });
 
-        let meta = await axios.get(tokenURI as string);
+        let meta = await axios.get(tokenURI);
         meta = meta.data;
 
         let item = {
