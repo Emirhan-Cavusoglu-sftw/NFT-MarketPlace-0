@@ -498,7 +498,6 @@ const NFTCollectionPage = () => {
                     className="focus:shadow-outline w-full rounded bg-gradient-to-r from-purple-900 to-violet-400 px-4 py-2 font-bold text-white focus:outline-none"
                     onClick={(e) => {
                       addNftToCollection(e, contractAddress);
-                      setShowPopup(false);
                     }}
                   >
                     Create NFT
@@ -519,7 +518,7 @@ const NFTCollectionPage = () => {
           <h2 className="mb-8 mt-10 bg-amber-400  bg-clip-text text-2xl font-bold text-transparent">
             Collection NFTs
           </h2>
-          <div className="grid grid-cols-1 ml-36 items-center text-center justify-center gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 items-center text-center justify-center gap-4 md:grid-cols-2 lg:grid-cols-3">
             {nftsData.length > 0 ? (
               nftsData.map((value, index) => (
                 <CollectionNftCard
