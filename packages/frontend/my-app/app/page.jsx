@@ -119,7 +119,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col  -mb-48 flex-nowrap justify-center text-center items-center
+    <div className="flex flex-col  flex-nowrap justify-center text-center items-center
      place-items-center pagebackground ">
         
       <Link href={"/TopNFTs"}>
