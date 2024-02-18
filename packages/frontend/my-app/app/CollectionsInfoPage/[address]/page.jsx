@@ -62,6 +62,8 @@ const NFTCollectionPage = () => {
     abi: collectionABI,
     functionName: "collectionPrice",
   });
+
+
   const { data: totalPrice } = useContractRead({
     address: contractAddress,
     abi: collectionABI,
@@ -93,7 +95,7 @@ const NFTCollectionPage = () => {
       args: [account.address],
       account: account.address,
     });
-    console.log(isOfferAccepted);
+    
     let offerLength = await readContract({
       address: contractAddress,
       abi: collectionABI,
@@ -166,7 +168,8 @@ const NFTCollectionPage = () => {
     updateNFTsData(items);
     updateNftDataFetched(true);
   }
-
+  // console.log(parseEther(formatEther(collectionPrice)))
+  // console.log(formatEther(collectionPrice))
   async function buyNFTCollection(contractAddress) {
     try {
       const price = parseEther(formatEther(collectionPrice));
@@ -177,7 +180,7 @@ const NFTCollectionPage = () => {
         abi: collectionABI,
         functionName: "sellTheCollection",
         account: account.address,
-        value: price,
+        value: collectionPrice,
       });
       await waitForTransaction({ hash });
 
@@ -212,7 +215,7 @@ const NFTCollectionPage = () => {
       abi: collectionABI,
       functionName: "owner",
     });
-    // console.log(collectionPrice);
+    
 
     tokenURI = GetIpfsUrlFromPinata(tokenURI);
     let meta = await axios.get(tokenURI);
@@ -288,7 +291,7 @@ const NFTCollectionPage = () => {
       );
 
       const price = parseEther(formParams.price);
-      console.log(price);
+      
       await writeContract({
         address: contractAddress,
         abi: collectionABI,
@@ -349,16 +352,25 @@ const NFTCollectionPage = () => {
                 >
                   Make an Offer
                 </button>
-                <button
-                  className="focus:shadow-outline rounded-full bg-gradient-to-r from-purple-900 to-violet-600 px-4 py-2 font-bold text-white focus:outline-none"
-                  onClick={() => setShowPopup(true)}
-                >
-                  Add NFT to Collection
-                </button>
+                
               </div>
             )}
 
-            {data.owner == account.address && <p>YOU ARE THE OWNER</p>}
+            {data.owner == account.address && (
+            <div>
+            <p>YOU ARE THE OWNER OF tHIS COLLECTION</p>
+            <button
+            className="focus:shadow-outline rounded-full bg-gradient-to-r from-purple-900 to-violet-600 px-4 py-2 font-bold text-white focus:outline-none"
+            onClick={() => setShowPopup(true)}
+            >
+            Add NFT to Your Collection
+          </button>
+              </div>
+            
+            
+            
+            
+            )}
           </div>
           <div className="flex items-center justify-center px-6 py-4">
             {isOfferAccepted && (

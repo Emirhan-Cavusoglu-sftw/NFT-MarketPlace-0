@@ -16,6 +16,7 @@ import { readContract } from "wagmi/actions";
 import { formatEther } from "viem";
 import axios from "axios";
 import NFTCollectionCard from "./components/NFTCollectionCard";
+
 export default function Home() {
   const [data, updateData] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
@@ -118,28 +119,30 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col   flex-nowrap justify-center text-center items-center
-     place-items-center mt-20 pagebackground">
+    <div className="flex flex-col  -mb-48 flex-nowrap justify-center text-center items-center
+     place-items-center pagebackground ">
+        
       <Link href={"/TopNFTs"}>
-        <div className="md:text-xl font-bold text-white">Top NFTs</div>
+        <div className="md:text-xl font-bold  text-white">Top NFTs</div>
       </Link>
-
-      <div className="flex mt-5 justify-center  flex-wrap max-w-screen-2xl text-center">
+      
+      <div className="flex  justify-center  flex-wrap max-w-screen-2xl text-center">
         {data?.map((value, index) => {
           return <NFTCard data={value} key={index}></NFTCard>;
         })}
       </div>
 
       <Link href={"/TopCollections"}>
-        <div className="md:text-xl font-bold text-white">Top Collections</div>
+        <div className="md:text-xl font-bold  text-white">Top Collections</div>
       </Link>
-      <div className="flex mt-5 justify-between flex-wrap max-w-screen-2xl text-center">
+      <div className="flex mt-5 justify-between   flex-wrap max-w-screen-2xl text-center">
         {collectionData?.map((value, index) => {
           return (
             <NFTCollectionCard data={value} key={index}></NFTCollectionCard>
           );
         })}
       </div>
+      
     </div>
   );
 }
