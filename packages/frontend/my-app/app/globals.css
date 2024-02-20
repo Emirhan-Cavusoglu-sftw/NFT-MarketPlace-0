@@ -64,17 +64,18 @@ body {
   margin: 0;
   padding: 0;
   width: 100vw;
-
+  min-height: 200vh;
   
-  background-image: linear-gradient(to right,  );
+  
+  background-image: linear-gradient(to right, #3b0764, #6930C3  );
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
-.background{
+/* .background{
   width: 100vw;
-  height: 180dvb;
+  
   
   background-image: linear-gradient(to right, #3b0764, #6930C3  );
   background-position: center center;
@@ -85,14 +86,14 @@ body {
 
 .pagebackground{
   width: 100vw;
-  height: 280dvb;
+  
   
 
   background-image: linear-gradient(to right,#3b0764,#6930C3 );
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-}
+} */
 
 /* grid styling */
 /* use {
