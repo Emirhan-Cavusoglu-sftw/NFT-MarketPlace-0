@@ -52,14 +52,16 @@ export default function Home() {
   }
   if (!dataFetched) getNFTData();
   return (
-    <div className="flex flex-col place-items-center mt-20 pagebackground">
+    <div className="bg-gradient-to-r from-purple-950 to-violet-600  min-h-screen">
+    <div className="flex flex-col items-center justify-center pt-24">
       <div className="md:text-xl font-bold text-white">Top NFTs</div>
 
-      <div className="flex mt-5 flex-wrap max-w-screen-xl text-center">
+      <div className="flex mt-5 flex-wrap justify-center items-center max-w-screen-xl pr-10">
         {data?.map((value, index) => {
           return <NFTCard data={value} key={index}></NFTCard>;
         })}
       </div>
+    </div>
     </div>
   );
 }

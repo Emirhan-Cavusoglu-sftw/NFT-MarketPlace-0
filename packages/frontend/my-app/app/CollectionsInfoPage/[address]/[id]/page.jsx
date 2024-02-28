@@ -85,53 +85,47 @@ const NftInfoPage = () => {
   if (typeof data.image == "string")
     data.image = GetIpfsUrlFromPinata(data.image);
 
-  return (
-    <div className="flex items-center justify-center mt-10 flex-col">
-      <>
-        <button className="text-white font-bold  mb-9">
-          <Link href={"/CollectionsInfoPage/" + contractAddress}>
-            Return To Collection
-          </Link>
-        </button>
-
-        <div className="bg-gradient-to-r from-amber-600 to-amber-400  rounded-lg shadow-lg overflow-hidden">
-          <img src={data.image} alt="" className="w-full h-64 object-cover" />
-          <div className="px-6 py-4">
-            <h2 className="text-xl font-semibold text-white mb-2">
-              {data.name}
-            </h2>
-            <p className="text-white">{data.description}</p>
-          </div>
-          <div className="px-6 py-4">
-            <div className="text-white">
-              Price: <span className="font-semibold">{data.price} ETH</span>
+    return (
+      <main className="bg-gradient-to-r from-purple-950 to-violet-600 min-h-screen px-4 py-8">
+        <div className="flex items-center justify-center">
+          <div className="bg-gradient-to-r from-amber-600 to-amber-400 rounded-lg shadow-lg overflow-hidden w-full max-w-md">
+            <img src={data.image} alt="" className="w-full h-48 object-cover" />
+            <div className="px-6 py-4">
+              <h2 className="text-xl font-semibold text-white mb-2">{data.name}</h2>
+              <p className="text-white text-sm">{data.description}</p>
             </div>
-            <div className="text-white">
-              Owner: <span className="font-semibold">{data.owner}</span>
-            </div>
-            <div className="text-white">
-              Seller: <span className="font-semibold">{data.seller}</span>
-            </div>
-          </div>
-          <div className="px-6 py-4 flex justify-center items-center">
-            {account.address !== data.owner &&
-            account.address !== data.seller ? (
-              <button
-                className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
-                onClick={() => buyNFT(tokenId)}
-              >
-                Buy this NFT
-              </button>
-            ) : (
-              <div className="text-green-600 font-semibold">
-                You are the owner of this NFT
+            <div className="px-6 py-2">
+              <div className="text-white text-sm">
+                Price: <span className="font-semibold">{data.price} ETH</span>
               </div>
-            )}
+              <div className="text-white text-sm">
+                Owner: <span className="font-semibold">{data.owner}</span>
+              </div>
+              <div className="text-white text-sm">
+                Seller: <span className="font-semibold">{data.seller}</span>
+              </div>
+            </div>
+            <div className="px-6 py-4 flex justify-center items-center">
+              {account.address !== data.owner && account.address !== data.seller && (
+                <button className="group relative  z-10 h-12 w-64 cursor-pointer 
+                overflow-hidden rounded-md border-none bg-black p-2 text-xl font-bold text-white"
+                onClick={() => buyNFT(tokenId)}
+                >
+                  Buy this NFT
+                  <span className="absolute -left-2 -top-8 h-32 w-72 origin-bottom scale-x-0 transform rounded-full bg-purple-200 transition-transform duration-1000 group-hover:scale-x-100 group-hover:duration-500"></span>
+                  <span className="absolute -left-2 -top-8 h-32 w-72 origin-bottom scale-x-0 transform rounded-full bg-purple-400 transition-transform duration-700 group-hover:scale-x-100 group-hover:duration-700"></span>
+                  <span className="absolute -left-2 -top-8 h-32 w-72 origin-bottom scale-x-0 transform rounded-full bg-violet-800 transition-transform duration-500 group-hover:scale-x-100 group-hover:duration-1000"></span>
+                  <span className="absolute -left-3 top-2.5 z-10 w-72 opacity-0 duration-100 group-hover:opacity-100 group-hover:duration-1000">
+                  Buy this NFT
+                  </span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </>
-    </div>
-  );
+      </main>
+    );
+    
 };
 
 export default dynamic(() => Promise.resolve(NftInfoPage), {

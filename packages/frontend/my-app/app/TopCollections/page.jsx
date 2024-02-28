@@ -77,15 +77,18 @@ export default function Home() {
   }
   console.log(collectionData);
   return (
-    <div className="flex flex-col place-items-center mt-20 pagebackground">
-      <div className="md:text-xl font-bold text-white">Top Collections</div>
-      <div className="flex mt-5 justify-between flex-wrap max-w-screen-xl text-center">
-        {collectionData?.map((value, index) => {
-          return (
-            <NFTCollectionCard data={value} key={index}></NFTCollectionCard>
-          );
-        })}
-      </div>
+<div className="bg-gradient-to-r from-purple-950 to-violet-600 min-h-screen">
+  <div className="flex flex-col items-center justify-center pt-24">
+    <div className="md:text-xl font-bold text-white">Top Collections</div>
+    <div className="flex mt-5 justify-center items-center flex-wrap max-w-screen-xl pr-10">
+      {collectionData?.map((value, index) => {
+        return (
+          <NFTCollectionCard data={value} key={index}></NFTCollectionCard>
+        );
+      })}
     </div>
+  </div>
+</div>
+
   );
 }

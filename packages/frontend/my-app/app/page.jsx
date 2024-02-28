@@ -119,30 +119,28 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col  flex-nowrap justify-center text-center items-center
-     place-items-center mt-24 ">
-        
-      <Link href={"/TopNFTs"}>
-        <div className="md:text-xl font-bold  text-white">Top NFTs</div>
-      </Link>
-      
-      <div className="flex  justify-center  flex-wrap max-w-screen-2xl text-center">
-        {data?.map((value, index) => {
-          return <NFTCard data={value} key={index}></NFTCard>;
-        })}
-      </div>
+    <div className="bg-gradient-to-r from-purple-950 to-violet-600  min-h-screen">
+      <div className="flex flex-col items-center justify-center py-12">
+        <Link href={"/TopNFTs"}>
+          <div className="text-xl font-bold text-white mb-4 cursor-pointer">Top NFTs</div>
+        </Link>
 
-      <Link href={"/TopCollections"}>
-        <div className="md:text-xl font-bold  text-white">Top Collections</div>
-      </Link>
-      <div className="flex mt-5 justify-between   flex-wrap max-w-screen-2xl text-center">
-        {collectionData?.map((value, index) => {
-          return (
-            <NFTCollectionCard data={value} key={index}></NFTCollectionCard>
-          );
-        })}
+        <div className="flex justify-center flex-wrap max-w-screen-2xl pr-10">
+          {data?.map((value, index) => {
+            return <NFTCard data={value} key={index}></NFTCard>;
+          })}
+        </div>
+
+        <Link href={"/TopCollections"}>
+          <div className="text-xl font-bold text-white mt-5 cursor-pointer">Top Collections</div>
+        </Link>
+
+        <div className="flex justify-center flex-wrap max-w-screen-2xl pr-10">
+          {collectionData?.map((value, index) => {
+            return <NFTCollectionCard data={value} key={index}></NFTCollectionCard>;
+          })}
+        </div>
       </div>
-      
     </div>
   );
 }

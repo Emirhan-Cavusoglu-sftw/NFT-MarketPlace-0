@@ -60,20 +60,20 @@ body {
   background-size: cover;
 } */
 
-body {
+/* body {
   margin: 0;
   padding: 0;
-  width: 100vw;
-
+  
+  
   
   background-image: linear-gradient(to right,  );
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-}
+} */
 
-.background{
-  width: 100vw;
+/* .background{
+  
   height: 180dvb;
   
   background-image: linear-gradient(to right, #3b0764, #6930C3  );
@@ -81,10 +81,10 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   
-}
+} */
 
-.pagebackground{
-  width: 100vw;
+/* .pagebackground{
+  
   height: 280dvb;
   
 
@@ -92,7 +92,7 @@ body {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-}
+} */
 
 /* grid styling */
 /* use {

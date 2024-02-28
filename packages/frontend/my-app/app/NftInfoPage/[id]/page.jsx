@@ -66,6 +66,7 @@ const NftInfoPage = () => {
     updateDataFetched(true);
   }
 
+
   const params = useParams();
   const tokenId = params.id;
 
@@ -74,7 +75,10 @@ const NftInfoPage = () => {
   if (typeof data.image == "string")
     data.image = GetIpfsUrlFromPinata(data.image);
 
+
+
   return (
+    <main className="bg-gradient-to-r from-purple-950 to-violet-600 min-h-screen px-4 py-8">
     <div className="mt-10 flex items-center justify-center">
       <div className="overflow-hidden rounded-lg bg-gradient-to-r  from-amber-600 to-amber-400 shadow-lg">
         <img
@@ -91,20 +95,14 @@ const NftInfoPage = () => {
             Price: <span className="font-semibold">{data.price} ETH</span>
           </div>
           <div className="text-white">
-            Owner: <span className="font-semibold">{data.owner}</span>
+            Owner: <span className="font-semibold">{(data.owner)}</span>
           </div>
           <div className="text-white">
-            Seller: <span className="font-semibold">{data.seller}</span>
+            Seller: <span className="font-semibold">{(data.seller)}</span>
           </div>
         </div>
         <div className="flex items-center justify-center px-6 py-4">
           {currAddress !== data.owner && currAddress !== data.seller ? (
-            // <button
-            //   className="bg-[#7D3799] hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-full text-sm"
-            //   onClick={() => buyNFT(tokenId)}
-            // >
-            //   Buy this NFT
-            // </button>
             <button className="group relative  z-10 h-12 w-64 cursor-pointer 
             overflow-hidden rounded-md border-none bg-black p-2 text-xl font-bold text-white"
             onClick={() => buyNFT(tokenId)}
@@ -125,6 +123,7 @@ const NftInfoPage = () => {
         </div>
       </div>
     </div>
+  </main>
   );
 };
 
